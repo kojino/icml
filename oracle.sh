@@ -9,13 +9,14 @@
 #SBATCH --mail-user=jperdomo@college.harvard.edu
 DATE="$(date +%m-%d)"
 
-EXP_DIR="oracle-$DATE"
+EXP_DIR="random-$DATE"
 ALPHA=.5
 NUM_CLASSIFIERS=5
 NUM_POINTS=200
-NOISE_FUNC="gradientDescent"
-ITERS=1000
+NOISE_FUNC="randomAscent"
+ITERS=5
 LOG_FILE="oracle.log"
+DATA_PATH="binary_data"
 
-CMD="python -m binary_experiments -classes 4 9 -noise_func $NOISE_FUNC -iters $ITERS -num_classifiers $NUM_CLASSIFIERS -exp_dir $EXP_DIR -alpha $ALPHA -num_point $NUM_POINTS -log_file $LOG_FILE"
-eval $CMD.sh
+CMD="python -m binary_experiments -data_path $DATA_PATH -noise_func $NOISE_FUNC -iters $ITERS -num_classifiers $NUM_CLASSIFIERS -exp_dir $EXP_DIR -alpha $ALPHA  -log_file $LOG_FILE"
+eval $CMD

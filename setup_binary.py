@@ -37,7 +37,10 @@ for i in xrange(num_classifiers):
     models.append(model)
 
 X_exp, Y_exp = helper.generate_data(num_points, X_test, Y_test, models)
+min_dists, max_dists = helper.findNoiseBounds(models, X_exp, Y_exp)
+print "Avg Min Max Noise Bounds {} {}".format(np.mean(min_dists), np.mean(max_dists))
 
+np.save(folder + "/" + "dists.npy", np.array([min_dists, max_dists]))
 np.save(folder + "/" + "X_exp.npy", X_exp)
 np.save(folder + "/" + "Y_exp.npy", Y_exp)
 np.save(folder + "/" + "X_test.npy", X_test)

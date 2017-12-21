@@ -18,7 +18,7 @@ def main(arguments):
     parser.add_argument("-alpha", help="noise budget", type=float, required=True)
     parser.add_argument("-log_file", help="name of the log file", type=str, required=True)
     parser.add_argument("-data_path", help="directory with experiment data + models", type=str, required=True)
-    parser.add_argument("-num_classifiers", help="number of classifiers", type=str, required=True)
+    parser.add_argument("-num_classifiers", help="number of classifiers", type=int, required=True)
     args = parser.parse_args(arguments)
 
     if not os.path.exists(args.exp_dir):
@@ -52,7 +52,7 @@ def main(arguments):
     X_exp = np.load(args.data_path + "/" + "X_exp.npy")
     Y_exp = np.load(args.data_path + "/" + "Y_exp.npy")
 
-    log.debug("Num Points {}\n".format(args.num_points))
+    log.debug("Num Points {}\n".format(X_test.shape[0]))
 
     noise_func = FUNCTION_DICT[args.noise_func]
 
