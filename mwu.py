@@ -20,7 +20,7 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, epsilon=None):
     else:
         delta = 2.0 * epsilon
 
-    log.debug("Running MWU for {} Iterations with Epsilon {}\n".format(T, epsilon))
+    log.debug("\nRunning MWU for {} Iterations with Epsilon {}\n".format(T, epsilon))
 
     log.debug("Guaranteed to be within {} of the minimax value \n".format(delta))
 
