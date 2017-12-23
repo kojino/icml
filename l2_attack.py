@@ -168,12 +168,12 @@ class CarliniL2:
             """
             if not isinstance(x, (float, int, np.int64)):
                 x = np.copy(x)
-                for v in x: # update the target scores for each individual prediction
+                for v in x:  # update the target scores for each individual prediction
                     if self.TARGETED:
                         v[y] -= self.CONFIDENCE
                     else:
                         v[y] += self.CONFIDENCE
-                x = np.argmax(x, 1) # these are the predictions of each hypothesis
+                x = np.argmax(x, 1)  # these are the predictions of each hypothesis
 
             if self.TARGETED:
                 return np.dot(x == y, weights)
@@ -187,8 +187,8 @@ class CarliniL2:
 
         # set the lower and upper bounds accordingly
         lower_bound = np.zeros(batch_size)
-        CONST = np.ones(batch_size)*self.initial_const
-        upper_bound = np.ones(batch_size)*1e10
+        CONST = np.ones(batch_size) * self.initial_const
+        upper_bound = np.ones(batch_size) * 1e10
 
         # the best l2, score, and image attack
         o_bestl2 = [1e10]*batch_size

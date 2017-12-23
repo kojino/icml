@@ -32,7 +32,6 @@ if __name__ == "__main__":
         # np.save(exp_dir+"/"+"permutation.npy", permutation)
 
 
-
         models = [MNISTModel("models/mnist", sess),
                   MNISTModel("models/multilayer", sess, conv=False),
                   MNISTModel("models/mnist-distilled-100", sess),

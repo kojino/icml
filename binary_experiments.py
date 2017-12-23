@@ -52,12 +52,12 @@ def main(arguments):
     X_exp = np.load(args.data_path + "/" + "X_exp.npy")
     Y_exp = np.load(args.data_path + "/" + "Y_exp.npy")
 
-    log.debug("Num Points {}\n".format(X_test.shape[0]))
+    log.debug("Num Points {}\n".format(X_exp.shape[0]))
 
     noise_func = FUNCTION_DICT[args.noise_func]
 
     weights, noise, loss_history, max_acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
-                                                                        noise_func)
+                                                                        noise_func, args.exp_dir)
 
     np.save(args.exp_dir + "/" + "weights.npy", weights)
     np.save(args.exp_dir + "/" + "noise.npy", noise)

@@ -11,7 +11,7 @@ def adversary(distribution, models, X, Y, alpha, noiseFunc):
     return np.array([noiseFunc(distribution, models, x, y, alpha) for x, y in zip(X,Y)])
 
 
-def runMWU(models, T, X, Y, alpha, noiseFunc, epsilon=None):
+def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None):
     num_models = len(models)
 
     if epsilon is None:
@@ -35,6 +35,13 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, epsilon=None):
 
     for t in xrange(T):
         log.debug("Iteration {}\n".format(t))
+
+        if t % (T * .10) == 0 and t > 0:
+            np.save(exp_dir + "/" + "weights_{}.npy".format(t), w)
+            np.save(exp_dir + "/" + "noise_{}.npy".format(t), v)
+            np.save(exp_dir + "/" + "loss_history_{}.npy".format(t), loss_history)
+            np.save(exp_dir + "/" + "max_acc_history_{}.npy".format(t), max_acc_history)
+            np.save(exp_dir + "/" + "action_loss_{}.npy".format(t), action_loss)
 
         start_time = time.time()
 
