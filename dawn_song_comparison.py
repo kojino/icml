@@ -13,6 +13,7 @@ import numpy as np
 from l2_attack import CarliniL2
 import tensorflow as tf
 import os
+import sys
 
 
 def main(arguments):
@@ -20,8 +21,10 @@ def main(arguments):
 
     parser.add_argument("-exp_dir", help="name of experiments", type=str, required=True)
     parser.add_argument("-log_file", help="name of the log file", type=str, required=True)
-    parser.add_argument("-targeted", help="boolean value to determine character of the noise", type=bool, required=True)
+    parser.add_argument("-targeted", help="boolean value to determine character of the noise", choices=[0, 1],
+                        type=int, required=True)
     parser.add_argument("-data_path", help="directory with experiment data + models", type=str, required=True)
+
     args = parser.parse_args(arguments)
 
     if not os.path.exists(args.exp_dir):
@@ -33,42 +36,47 @@ def main(arguments):
     file_handler = log.FileHandler(args.exp_dir + "/" + args.log_file)
     log.getLogger().addHandler(file_handler)
 
-    # create the models
-    input_tensor = Input(shape=(224, 224, 3))
-    tf_inputs = Lambda(lambda x: preprocess_input(x, mode='tf'))(input_tensor)
-    caffe_inputs = Lambda(lambda x: preprocess_input(x, mode='caffe'))(input_tensor)
+    # config=tf.ConfigProto(allow_soft_placement=True)
+    with tf.Session() as sess:
 
-    base_xception = Xception(input_tensor=input_tensor, weights="imagenet", include_top=True)
-    xception = Model(input=input_tensor, output=base_xception(tf_inputs))
+        # create the models
+        input_tensor = Input(shape=(224, 224, 3))
+        tf_inputs = Lambda(lambda x: preprocess_input(x, mode='tf'))(input_tensor)
+        caffe_inputs = Lambda(lambda x: preprocess_input(x, mode='caffe'))(input_tensor)
 
-    base_inception = InceptionV3(input_tensor=input_tensor, weights="imagenet", include_top=True)
-    inception = Model(input=input_tensor, output=base_inception(tf_inputs))
+        base_xception = Xception(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        xception = Model(input=input_tensor, output=base_xception(tf_inputs))
 
-    base_resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=True)
-    resnet = Model(input=input_tensor, output=base_resnet(caffe_inputs))
+        # base_inception = InceptionV3(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        # inception = Model(input=input_tensor, output=base_inception(tf_inputs))
 
-    base_inceptionresnet = InceptionResNetV2(input_tensor=input_tensor, weights="imagenet", include_top=True)
-    inceptionresnet = Model(input=input_tensor, output=base_inceptionresnet(tf_inputs))
+        # base_resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        # resnet = Model(input=input_tensor, output=base_resnet(caffe_inputs))
+        #
+        # base_inceptionresnet = InceptionResNetV2(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        # inceptionresnet = Model(input=input_tensor, output=base_inceptionresnet(tf_inputs))
+        #
+        # base_vgg = VGG19(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        # vgg = Model(input=input_tensor, output=base_vgg(caffe_inputs))
 
-    base_vgg = VGG19(input_tensor=input_tensor, weights="imagenet", include_top=True)
-    vgg = Model(input=input_tensor, output=base_vgg(caffe_inputs))
+        models = [xception]
 
-    models = [xception, inception, resnet, inceptionresnet, vgg]
+        # models = [xception, inception, resnet, inceptionresnet, vgg]
 
-    for model in models:
-        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        for model in models:
+            model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    X_exp = np.load(args.data_path + "/" + "X_exp.npy")[:3]
-    Y_true_exp = np.load(args.data_path + "/" + "Y_true_exp.npy")[:3]
-    Y_target_exp = np.load(args.data_path + "/" + "Y_target_exp.npy")
+        X_exp = np.load(args.data_path + "/" + "X_exp.npy")[:3]
+        Y_true_exp = np.load(args.data_path + "/" + "Y_true_exp.npy")[:3]
+        Y_target_exp = np.load(args.data_path + "/" + "Y_target_exp.npy")
 
-    num_models = len(models)
-    weights = [1.0 / num_models] * num_models
+        print "True Labels ", np.argmax(Y_true_exp, axis=1)
 
-    with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
-
-        carlini = CarliniL2(sess, models, targeted=args.targeted, batch_size=1, max_iterations=4000,
-                            binary_search_steps=9, confidence=0)
+        num_models = len(models)
+        weights = [1.0 / num_models] * num_models
+        print "ARGS.targeted", args.targeted
+        carlini = CarliniL2(sess, models, targeted=args.targeted, batch_size=1, max_iterations=101,
+                            binary_search_steps=2, confidence=0)
 
         untargeted_adv = carlini.attack(X_exp, Y_true_exp, weights)
 
@@ -95,6 +103,8 @@ def main(arguments):
             print row
 
 
+if __name__ =="__main__":
+    main(sys.argv[1:])
 
 
 

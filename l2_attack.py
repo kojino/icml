@@ -11,12 +11,12 @@ import tensorflow as tf
 import numpy as np
 
 BINARY_SEARCH_STEPS = 9  # number of times to adjust the constant with binary search
-MAX_ITERATIONS = 10000   # number of iterations to perform gradient descent
+MAX_ITERATIONS = 1000   # number of iterations to perform gradient descent
 ABORT_EARLY = True       # if we stop improving, abort gradient descent early
 LEARNING_RATE = 1e-2     # larger values converge faster to less accurate results, default 1e-2
 TARGETED = False         # should we target one specific class? or just be wrong?
 CONFIDENCE = 0          # how strong the adversarial example should be
-INITIAL_CONST = 1e-3     # the initial constant c to pick as a first guess
+INITIAL_CONST = 1e2     # the initial constant c to pick as a first guess
 
 
 class CarliniL2:
@@ -25,7 +25,7 @@ class CarliniL2:
                  binary_search_steps = BINARY_SEARCH_STEPS, max_iterations = MAX_ITERATIONS,
                  abort_early = ABORT_EARLY, 
                  initial_const = INITIAL_CONST,
-                 boxmin = -0.5, boxmax = 0.5):
+                 boxmin=0.0, boxmax=255.0):
         """
         The L_2 optimized attack. 
 
@@ -53,7 +53,7 @@ class CarliniL2:
         boxmax: Maximum pixel value (default 0.5).
         """
 
-        image_size, num_channels, num_labels = models[0].image_size, models[0].num_channels, models[0].num_labels
+        image_size, num_channels, num_labels = 224, 3, 1000  # imagenet parameters
         self.sess = sess
         self.TARGETED = targeted
         self.LEARNING_RATE = learning_rate
@@ -66,10 +66,10 @@ class CarliniL2:
         self.num_models = len(models)
         self.num_labels = num_labels
 
-        shape = (batch_size,image_size,image_size,num_channels)
+        shape = (batch_size, image_size, image_size, num_channels)
         
         # the variable we're going to optimize over
-        modifier = tf.Variable(np.zeros(shape,dtype=np.float32))
+        modifier = tf.Variable(np.zeros(shape, dtype=np.float32))
 
         # these are variables to be more efficient in sending data to tf
         self.timg = tf.Variable(np.zeros(shape), dtype=tf.float32)
@@ -87,19 +87,21 @@ class CarliniL2:
         self.boxmul = (boxmax - boxmin) / 2.
         self.boxplus = (boxmin + boxmax) / 2.
         self.newimg = tf.tanh(modifier + self.timg) * self.boxmul + self.boxplus
-        
+
         # prediction BEFORE-SOFTMAX of the model
-        self.outputs = [model.predict(self.newimg) for model in models]
+        # np.expand_dims(self.newimg, axis=0)
+
+        self.outputs = [model(self.newimg) for model in models]
         
         # distance to the input data
-        self.l2dist = tf.reduce_sum(tf.square(self.newimg-(tf.tanh(self.timg) * self.boxmul + self.boxplus)),[1,2,3])
+        self.l2dist = tf.reduce_sum(tf.square(self.newimg-(tf.tanh(self.timg) * self.boxmul + self.boxplus)), [1, 2, 3])
         
         # compute the probability of the label class versus the maximum other
         reals = []
         others = []
         for i in xrange(self.num_models):
-            real = tf.reduce_sum((self.tlab) * self.outputs[i], 1)
-            other = tf.reduce_max((1 - self.tlab)*self.outputs[i] - (self.tlab*10000), 1)
+            real = tf.reduce_sum(self.tlab * self.outputs[i], 1)
+            other = tf.reduce_max((1 - self.tlab) * self.outputs[i], 1)
             reals.append(real)
             others.append(other)
         self.reals, self.others = reals, others
@@ -107,12 +109,14 @@ class CarliniL2:
         loss1list = []
 
         if self.TARGETED:
+            print "targeted "
             # if targeted, optimize for making the other class most likely
             for i in xrange(self.num_models):
                 loss1list.append(tf.maximum(0.0, self.weights[i] * (others[i] - reals[i] + self.CONFIDENCE)))
 
         else:
             # if untargeted, optimize for making this class least likely.
+            print "Untargeted "
             for i in xrange(self.num_models):
                 loss1list.append(tf.maximum(0.0, self.weights[i] * (reals[i] - others[i] + self.CONFIDENCE)))
 
@@ -213,24 +217,25 @@ class CarliniL2:
 
             # print "Outer Step ", outer_step, "Current C ", CONST, lower_bound, upper_bound
 
-
+            print "GOT HERE "
             prev = 1e10 # used to be e6
+            from keras import backend as K
 
-            for iteration in range(self.MAX_ITERATIONS):
-
+            for iteration in xrange(self.MAX_ITERATIONS):
+                print "Iteration ", iteration
                 # perform the attack 
-                _, l, l2s, scores, nimg = self.sess.run([self.train, self.loss,
-                                                         self.l2dist, self.outputs,
-                                                         self.newimg])
+                _, l, l2s, scores, nimg = self.sess.run([self.train, self.loss, self.l2dist, self.outputs, self.newimg],
+                                                        feed_dict={K.learning_phase(): 0})
 
                 scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 
-                # if iteration % 200 == 0:
-                #     print(iteration, self.sess.run((self.loss, self.loss1, self.loss2)))
-
+                if iteration % 1 == 0:
+                    print "PREDICTION ", [np.argmax(score, axis=1) for score in scores]
+                    print(iteration, self.sess.run((self.loss, self.loss1, self.loss2, self.loss1list, self.weights, self.reals, self.others),
+                                                   feed_dict={K.learning_phase(): 0}))
 
                 # check if we should abort search if we're getting nowhere. (check every 10%)
-                if self.ABORT_EARLY and iteration%(self.MAX_ITERATIONS * .10) == 0:
+                if self.ABORT_EARLY and iteration % (self.MAX_ITERATIONS * .10) == 0:
                     if l > prev*.9999:
                         break
                     prev = l
