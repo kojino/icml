@@ -222,14 +222,12 @@ class CarliniL2:
             from keras import backend as K
 
             for iteration in xrange(self.MAX_ITERATIONS):
-                print "Iteration ", iteration
                 # perform the attack 
                 _, l, l2s, scores, nimg = self.sess.run([self.train, self.loss, self.l2dist, self.outputs, self.newimg],
                                                         feed_dict={K.learning_phase(): 0})
-
                 scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 
-                if iteration % 1 == 0:
+                if iteration % 1000 == 0:
                     print "PREDICTION ", [np.argmax(score, axis=1) for score in scores]
                     print(iteration, self.sess.run((self.loss, self.loss1, self.loss2, self.loss1list, self.weights, self.reals, self.others),
                                                    feed_dict={K.learning_phase(): 0}))

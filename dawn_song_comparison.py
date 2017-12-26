@@ -37,31 +37,31 @@ def main(arguments):
     log.getLogger().addHandler(file_handler)
 
     # config=tf.ConfigProto(allow_soft_placement=True)
-    with tf.Session() as sess:
+    with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
 
         # create the models
         input_tensor = Input(shape=(224, 224, 3))
         tf_inputs = Lambda(lambda x: preprocess_input(x, mode='tf'))(input_tensor)
         caffe_inputs = Lambda(lambda x: preprocess_input(x, mode='caffe'))(input_tensor)
 
-        base_xception = Xception(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        xception = Model(input=input_tensor, output=base_xception(tf_inputs))
+        #base_xception = Xception(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        #xception = Model(input=input_tensor, output=base_xception(tf_inputs))
 
-        # base_inception = InceptionV3(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        # inception = Model(input=input_tensor, output=base_inception(tf_inputs))
+        base_inception = InceptionV3(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        inception = Model(input=input_tensor, output=base_inception(tf_inputs))
 
-        # base_resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        # resnet = Model(input=input_tensor, output=base_resnet(caffe_inputs))
+        base_resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        resnet = Model(input=input_tensor, output=base_resnet(caffe_inputs))
         #
-        # base_inceptionresnet = InceptionResNetV2(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        # inceptionresnet = Model(input=input_tensor, output=base_inceptionresnet(tf_inputs))
+        base_inceptionresnet = InceptionResNetV2(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        inceptionresnet = Model(input=input_tensor, output=base_inceptionresnet(tf_inputs))
         #
-        # base_vgg = VGG19(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        # vgg = Model(input=input_tensor, output=base_vgg(caffe_inputs))
+        base_vgg = VGG19(input_tensor=input_tensor, weights="imagenet", include_top=True)
+        vgg = Model(input=input_tensor, output=base_vgg(caffe_inputs))
 
-        models = [xception]
+        #models = [xception]
 
-        # models = [xception, inception, resnet, inceptionresnet, vgg]
+        models = [inception, resnet, inceptionresnet, vgg]
 
         for model in models:
             model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -74,9 +74,9 @@ def main(arguments):
 
         num_models = len(models)
         weights = [1.0 / num_models] * num_models
-        print "ARGS.targeted", args.targeted
-        carlini = CarliniL2(sess, models, targeted=args.targeted, batch_size=1, max_iterations=101,
-                            binary_search_steps=2, confidence=0)
+        print "Starting attack"
+        carlini = CarliniL2(sess, models, targeted=args.targeted, batch_size=1, max_iterations=9000,
+                            binary_search_steps=9, confidence=0)
 
         untargeted_adv = carlini.attack(X_exp, Y_true_exp, weights)
 
