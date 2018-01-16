@@ -2,7 +2,7 @@ import logging as log
 import argparse
 import os
 import numpy as np
-from binary_models import LinearBinaryClassifier
+from linear_models import LinearBinaryClassifier
 from noise_functions_binary import FUNCTION_DICT
 from mwu import runMWU
 import sys

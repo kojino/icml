@@ -2,7 +2,7 @@ from setup_mnist import MNIST
 import helper
 import os
 import numpy as np
-from binary_models import trainLBC
+from linear_models import trainLBC
 
 classes = [4, 9]
 num_classifiers = 5

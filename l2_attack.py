@@ -9,10 +9,11 @@
 
 import tensorflow as tf
 import numpy as np
+import logging as log
 
 BINARY_SEARCH_STEPS = 9  # number of times to adjust the constant with binary search
 MAX_ITERATIONS = 1000   # number of iterations to perform gradient descent
-ABORT_EARLY = True       # if we stop improving, abort gradient descent early
+ABORT_EARLY = False       # if we stop improving, abort gradient descent early
 LEARNING_RATE = 1e-2     # larger values converge faster to less accurate results, default 1e-2
 TARGETED = False         # should we target one specific class? or just be wrong?
 CONFIDENCE = 0          # how strong the adversarial example should be
@@ -109,14 +110,13 @@ class CarliniL2:
         loss1list = []
 
         if self.TARGETED:
-            print "targeted "
             # if targeted, optimize for making the other class most likely
             for i in xrange(self.num_models):
                 loss1list.append(tf.maximum(0.0, self.weights[i] * (others[i] - reals[i] + self.CONFIDENCE)))
 
         else:
             # if untargeted, optimize for making this class least likely.
-            print "Untargeted "
+            # print "Untargeted "
             for i in xrange(self.num_models):
                 loss1list.append(tf.maximum(0.0, self.weights[i] * (reals[i] - others[i] + self.CONFIDENCE)))
 
@@ -215,27 +215,34 @@ class CarliniL2:
                                        self.assign_const: CONST,
                                        self.assign_weights: weights})
 
-            # print "Outer Step ", outer_step, "Current C ", CONST, lower_bound, upper_bound
+            # p"Outer Step ", outer_step, "Current C ", CONST, lower_bound, upper_bound
 
-            print "GOT HERE "
+            # print "GOT HERE "
             prev = 1e10 # used to be e6
             from keras import backend as K
 
             for iteration in xrange(self.MAX_ITERATIONS):
+
+                step_print = 50
+                if iteration == self.MAX_ITERATIONS - 1:
+                    # print "Max iters", self.MAX_ITERATIONS
+                    log.debug("{} {}".format(iteration, self.sess.run(
+                             (self.loss, self.loss1, self.loss2, self.loss1list, self.weights, self.reals, self.others),
+                              feed_dict={K.learning_phase(): 0})))
+
                 # perform the attack 
                 _, l, l2s, scores, nimg = self.sess.run([self.train, self.loss, self.l2dist, self.outputs, self.newimg],
                                                         feed_dict={K.learning_phase(): 0})
+
                 scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 
-                if iteration % 1000 == 0:
-                    print "PREDICTION ", [np.argmax(score, axis=1) for score in scores]
-                    print(iteration, self.sess.run((self.loss, self.loss1, self.loss2, self.loss1list, self.weights, self.reals, self.others),
-                                                   feed_dict={K.learning_phase(): 0}))
+                # if iteration % step_print == 0:
+                #     print "PREDICTION ", [np.argmax(score, axis=1) for score in scores]
 
                 # check if we should abort search if we're getting nowhere. (check every 10%)
                 if self.ABORT_EARLY and iteration % (self.MAX_ITERATIONS * .10) == 0:
                     if l > prev*.9999:
-                        break
+                        break # TODO
                     prev = l
 
                 for e,(l2,sc,ii) in enumerate(zip(l2s,scores,nimg)):
@@ -260,6 +267,7 @@ class CarliniL2:
             # adjust the constant as needed
             for e in range(batch_size):
                 if bestscore[e] == 1.0:
+                    # print "A"
                     upper_bound[e] = min(upper_bound[e], CONST[e])
                     if upper_bound[e] < 1e9:
                         CONST[e] = (lower_bound[e] + upper_bound[e])/2

@@ -1,7 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from noise_functions_binary import tryRegionBinary
+import sys
 
+
+def get_max(lst, target):
+    """
+    returns maximum of the list (ix, elt); omits target entry
+    """
+    n1 = (-sys.maxint, None)
+    for ix, elt in enumerate(lst):
+        if ix == target:
+            continue
+        elif elt > n1[1]:
+            n1 = (ix, elt)
+    return n1
 
 def findNoiseBounds(models, X, Y):
     max_bounds = []
