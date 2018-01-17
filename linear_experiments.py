@@ -33,15 +33,15 @@ def main(arguments):
     log.basicConfig(format='%(asctime)s: %(message)s', level=log.DEBUG,
                     datefmt='%m/%d/%Y %I:%M:%S %p')
 
-    file_handler = log.FileHandler(args.exp_dir + "/" + log_file)
+    file_handler = log.FileHandler(exp_name + "/" + log_file)
     log.getLogger().addHandler(file_handler)
 
     log.debug("{} CLASSIFICATION: \n".format(args.exp_type))
     log.debug("Noise Function {}".format(args.noise_func))
     log.debug("Iters {} ".format(args.iters))
     log.debug("Alpha {}".format(args.alpha))
-    log.debug("Data path : ".format(args.data_path))
-    log.debug("Num Classifiers : ".format(args.num_classifiers))
+    log.debug("Data path : {}".format(args.data_path))
+    log.debug("Num Classifiers : {}".format(args.num_classifiers))
 
     X_test = np.load(args.data_path + "/" + "X_test.npy")
     Y_test = np.load(args.data_path + "/" + "Y_test.npy")
@@ -54,7 +54,7 @@ def main(arguments):
         if args.exp_type == "binary":
             model = LinearBinaryClassifier(weights, bias)
         else:
-            model = LinearOneVsAllClassifier(weights, bias)
+            model = LinearOneVsAllClassifier(10, weights, bias)
         log.debug("Model {}, Test Accuracy {}".format(i, model.evaluate(X_test, Y_test)))
         models.append(model)
 
@@ -69,13 +69,13 @@ def main(arguments):
         noise_func = FUNCTION_DICT_MULTI[args.noise_func]
 
     weights, noise, loss_history, max_acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
-                                                                        noise_func, args.exp_dir)
+                                                                        noise_func, exp_name)
 
-    np.save(args.exp_dir + "/" + "weights.npy", weights)x
-    np.save(args.exp_dir + "/" + "noise.npy", noise)
-    np.save(args.exp_dir + "/" + "loss_history.npy", loss_history)
-    np.save(args.exp_dir + "/" + "max_acc_history.npy", max_acc_history)
-    np.save(args.exp_dir + "/" + "action_loss.npy", action_loss)
+    np.save(exp_name + "/" + "weights.npy", weights)
+    np.save(exp_name + "/" + "noise.npy", noise)
+    np.save(exp_name + "/" + "loss_history.npy", loss_history)
+    np.save(exp_name + "/" + "max_acc_history.npy", max_acc_history)
+    np.save(exp_name + "/" + "action_loss.npy", action_loss)
 
     log.debug("Success")
 

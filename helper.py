@@ -31,14 +31,14 @@ def findNoiseBoundsBinary(models, X, Y):
 
 
 def findNoiseBoundsMulti(models, X, Y):
-    max_bounds = []
-    num_models = len(models)
-    for i in xrange(len(X)):
-        max_v = distributionalOracleOneVsAll([1] * num_models, models, X[i], Y[i], sys.maxint)
-        max_bounds.append(np.linalg.norm(max_v))
+    # max_bounds = []
+    # num_models = len(models)
+    # for i in xrange(len(X)):
+    #     max_v = distributionalOracleOneVsAll([1] * num_models, models, X[i], Y[i], sys.maxint)
+    #     max_bounds.append(np.linalg.norm(max_v))
     min_bounds = np.array([model.distance(X) for model in models]).T
     min_bounds = np.mean(min_bounds, axis=1)
-    return min_bounds, max_bounds
+    return min_bounds
 
 
 def shuffleArraysInUnison(a, b, p=None):

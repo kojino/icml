@@ -12,7 +12,7 @@ ALPHA=.5
 EXP_TYPE="binary"
 NUM_CLASSIFIERS=5
 NUM_POINTS=100
-NOISE_FUNC="randomAscent"
+NOISE_FUNC="greedyAscent"
 ITERS=100
 DATA_PATH="binary_data_2"
 

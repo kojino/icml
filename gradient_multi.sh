@@ -9,12 +9,12 @@
 #SBATCH --mail-user=jperdomo@college.harvard.edu
 
 ALPHA=.5
-EXP_TYPE="binary"
+EXP_TYPE="multiclass"
 NUM_CLASSIFIERS=5
 NUM_POINTS=100
-NOISE_FUNC="randomAscent"
+NOISE_FUNC="gradientDescent"
 ITERS=100
-DATA_PATH="binary_data_2"
+DATA_PATH="multiclass_data_2"
 
 CMD="python -m linear_experiments -data_path $DATA_PATH -noise_func $NOISE_FUNC -iters $ITERS -num_classifiers $NUM_CLASSIFIERS -exp_type $EXP_TYPE -alpha $ALPHA"
 eval $CMD

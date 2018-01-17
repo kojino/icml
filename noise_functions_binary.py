@@ -112,12 +112,13 @@ greedyCoordinateAscent = partial(coordinateAscent, greedy=True)
 randomCoordinateAscent = partial(coordinateAscent, greedy=False)
 
 
-def gradientDescentBinary(distribution, models, x, y, alpha, T=1000, learning_rate=.001):
+def gradientDescentBinary(distribution, models, x, y, alpha, learning_rate=.001, T=3000):
     v = np.zeros(len(x))
     for i in xrange(T):
         loss = np.dot(distribution, [model.rhinge_loss(x + v, y) for model in models])
         if loss == 0:
             break
+
         # print i, loss, np.mean([model.predict(x + v) for model in models])
         gradient = sum([-1 * w * model.gradient(x + v, y) for w, model in zip(distribution, models)])[0]
         v += learning_rate * gradient
