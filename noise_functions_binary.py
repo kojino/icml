@@ -112,7 +112,7 @@ greedyCoordinateAscent = partial(coordinateAscent, greedy=True)
 randomCoordinateAscent = partial(coordinateAscent, greedy=False)
 
 
-def gradientDescent(distribution, models, x, y, alpha, T=1000, learning_rate=.001):
+def gradientDescentBinary(distribution, models, x, y, alpha, T=1000, learning_rate=.001):
     v = np.zeros(len(x))
     for i in xrange(T):
         loss = np.dot(distribution, [model.rhinge_loss(x + v, y) for model in models])
@@ -127,9 +127,9 @@ def gradientDescent(distribution, models, x, y, alpha, T=1000, learning_rate=.00
     return v
 
 
-FUNCTION_DICT = {"randomAscent": randomCoordinateAscent,
-                 "greedyAscent": greedyCoordinateAscent,
-                 "binaryOracle": distributionalOracle,
-                 "gradientDescent": gradientDescent}
+FUNCTION_DICT_BINARY = {"randomAscent": randomCoordinateAscent,
+                        "greedyAscent": greedyCoordinateAscent,
+                        "oracle": distributionalOracle,
+                        "gradientDescent": gradientDescentBinary}
 
 

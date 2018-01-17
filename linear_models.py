@@ -1,5 +1,8 @@
 import numpy as np
 from sklearn import svm
+from helper import getMax
+from noise_functions_multiclass import tryRegionOneVsAll
+
 
 
 class LinearBinaryClassifier(object):
@@ -133,7 +136,7 @@ class LinearOneVsAllClassifier(object):
             if np.argmax(preds[i]) == target:
                 res = np.zeros(self.dim)
             else:
-                max_ix = get_max(preds[i], target)[0]
+                max_ix = getMax(preds[i], target)[0]
                 w_max = self.weights[max_ix]
                 w_target = self.weights[target]
                 res = w_max - w_target
@@ -146,10 +149,14 @@ class LinearOneVsAllClassifier(object):
         for i in xrange(len(X)):
             target = targets[i]
             if np.argmax(preds) != target:
-                max_ix, max_val = get_max(preds[i], target)
+                max_ix, max_val = getMax(preds[i], target)
                 loss = max_val - preds[i][target]
             else:
                 loss = 0
             res.append(loss)
         return res
 
+def trainLMC(X, Y):
+    model = svm.LinearSVC(loss='hinge')
+    model.fit(X, Y)
+    return LinearOneVsAllClassifier(10, model.coef_, model.intercept_)

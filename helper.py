@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from noise_functions_binary import tryRegionBinary
+from noise_functions_multiclass import distributionalOracleOneVsAll
 import sys
 
 
-def get_max(lst, target):
+def getMax(lst, target):
     """
     returns maximum of the list (ix, elt); omits target entry
     """
@@ -16,7 +17,8 @@ def get_max(lst, target):
             n1 = (ix, elt)
     return n1
 
-def findNoiseBounds(models, X, Y):
+
+def findNoiseBoundsBinary(models, X, Y):
     max_bounds = []
     num_models = len(models)
     for i in xrange(len(X)):
@@ -25,7 +27,18 @@ def findNoiseBounds(models, X, Y):
         max_bounds.append(np.linalg.norm(max_v))
     min_bounds = np.array([model.distance(X) for model in models]).T
     min_bounds = np.mean(min_bounds, axis=1)
-    return max_bounds, min_bounds
+    return min_bounds, max_bounds
+
+
+def findNoiseBoundsMulti(models, X, Y):
+    max_bounds = []
+    num_models = len(models)
+    for i in xrange(len(X)):
+        max_v = distributionalOracleOneVsAll([1] * num_models, models, X[i], Y[i], sys.maxint)
+        max_bounds.append(np.linalg.norm(max_v))
+    min_bounds = np.array([model.distance(X) for model in models]).T
+    min_bounds = np.mean(min_bounds, axis=1)
+    return min_bounds, max_bounds
 
 
 def shuffleArraysInUnison(a, b, p=None):

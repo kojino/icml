@@ -1,14 +1,10 @@
-from setup_mnist import MNIST
-import helper
 import numpy as np
-import time
-import matplotlib.pyplot as plt
-from sklearn import svm
 from cvxopt import matrix, solvers
 from itertools import product
 from functools import partial
+import sys
 
-
+GREEDY_DICT = dict(np.load("greedy_dict.npy"))
 
 
 def tryRegionOneVsAll(models, labels, x, delta=1e-10):
@@ -58,10 +54,8 @@ def distributionalOracleOneVsAll(distribution, models, x, y, alpha):
     values = sorted(set([value for label, value in labels_values]), reverse=True)
 
     for curr_value in values:
-        print "Curr Value", curr_value
         feasible_candidates = []
         for labels in [labels for labels, val in labels_values if val == curr_value]:
-            print labels
             v = tryRegionOneVsAll(models, labels, x)
             if v is not None:
                 norm = np.linalg.norm(v)
@@ -70,7 +64,6 @@ def distributionalOracleOneVsAll(distribution, models, x, y, alpha):
         # amongst those with the max value, return the one with the minimum norm
         if feasible_candidates:
             # break out of the loop since we have already found the optimal answer
-            print "curr_value ", curr_value
             return min(feasible_candidates, key=lambda x: x[1])[0]
     return np.zeros(x.shape[0])  # we can't trick anything
 
@@ -125,7 +118,6 @@ def gradientDescentTargeted(distribution, models, x, target, alpha, learning_rat
         loss_queue = [loss] + loss_queue
         if i >= early_stop:
             del loss_queue[-1]
-            #             print "Len ", len(loss_queue)
             val = loss_queue[-1]
             if sum([val == q_val for q_val in loss_queue]) == early_stop:
                 break
@@ -134,10 +126,7 @@ def gradientDescentTargeted(distribution, models, x, target, alpha, learning_rat
             best_sol = (loss, v)
 
         if loss == 0:
-            #             print "FOUND IT"
             break
-
-            #         print i, loss, [model.predict(curr_sol) for model in models], np.linalg.norm(v)
 
     return best_sol
 
@@ -147,14 +136,16 @@ def gradientDescentUntargeted(distribution, models, x, y, alpha):
     del targets[y]
     noise_options = []
     for target in targets:
-#         print "Target ", target
         sol = gradientDescentTargeted(distribution, models, x, target, alpha)
         noise_options.append(sol)
         if sol[0] == 0:
-#             print "BREAK"
-#             print [model.predict((x + sol[1]).reshape(1,-1)) for model in models]
             return sol[1]
     return min(noise_options, key=lambda x:x[0])[1]
 
-greedyCoordinateAscent = partial(coordinateAscentMulti, greedy=MEAN_DICT)
-randomCoordinateAscent = partial(coordinateAscentMulti, greedy=False)
+greedyCoordinateAscentMulti = partial(coordinateAscentMulti, greedy=GREEDY_DICT)
+randomCoordinateAscentMulti = partial(coordinateAscentMulti, greedy=False)
+
+FUNCTION_DICT_MULTI = {"randomAscent": randomCoordinateAscentMulti,
+                       "greedyAscent": greedyCoordinateAscentMulti,
+                       "oracle": distributionalOracleOneVsAll,
+                       "gradientDescent": gradientDescentUntargeted}
