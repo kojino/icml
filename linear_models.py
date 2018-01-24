@@ -156,6 +156,47 @@ class LinearOneVsAllClassifier(object):
             res.append(loss)
         return res
 
+    def untargeted_loss(self, X, Y):
+        preds = np.matmul(X, self.weights.T) + self.bias
+        n = len(X)
+        loss = []
+
+        for i in xrange(n):
+            y = Y[i]
+            others = range(10)
+            del others[y]
+            if np.argmax(preds[i]) != y:
+                res = 0
+            else:
+                max_val = getMax(preds[i], y)[1]
+                y_val = preds[i][y]
+                res = y_val - max_val
+            loss.append(res)
+        return np.array(loss)
+
+    def gradient_untargeted(self, X, Y):
+        """
+        returns gradient
+        """
+        preds = np.matmul(X, self.weights.T) + self.bias
+        n = len(X)
+        gradient = []
+
+        for i in xrange(n):
+            y = Y[i]
+            others = range(10)
+            del others[y]
+            if np.argmax(preds[i]) != y:
+                res = np.zeros(self.dim)
+            else:
+                max_ix = getMax(preds[i], y)[0]
+                w_max = self.weights[max_ix]
+                w_y = self.weights[y]
+                res = w_y - w_max
+            gradient.append(res)
+        return np.array(gradient)
+
+
 def trainLMC(X, Y):
     model = svm.LinearSVC(loss='hinge')
     model.fit(X, Y)

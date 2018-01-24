@@ -142,10 +142,41 @@ def gradientDescentUntargeted(distribution, models, x, y, alpha):
             return sol[1]
     return min(noise_options, key=lambda x:x[0])[1]
 
+
+def gradientDescentNonConvex(distribution, models, x, y, alpha, learning_rate=.001, T=3000, early_stop=5):
+    v = np.zeros(len(x))
+    best_sol = (sys.maxint, v)
+    loss_queue = []
+    for i in xrange(T):
+        gradient = sum([-1 * p * model.gradient_untargeted(np.array([x + v]), [y])
+                        for p, model in zip(distribution, models)])[0]
+        v += learning_rate * gradient
+        norm = np.linalg.norm(v)
+        if norm >= alpha:
+            v = v / norm * alpha
+
+        loss = np.dot(distribution, [model.untargeted_loss(np.array([x + v]), [y])[0] for model in models])
+
+        loss_queue = [loss] + loss_queue
+        if i >= early_stop:
+            del loss_queue[-1]
+            val = loss_queue[-1]
+            if sum([val == q_val for q_val in loss_queue]) == early_stop:
+                break
+
+        if loss < best_sol[0]:
+            best_sol = (loss, v)
+
+        if loss == 0:
+            break
+
+    return best_sol[1]
+
 greedyCoordinateAscentMulti = partial(coordinateAscentMulti, greedy=GREEDY_DICT)
 randomCoordinateAscentMulti = partial(coordinateAscentMulti, greedy=False)
 
 FUNCTION_DICT_MULTI = {"randomAscent": randomCoordinateAscentMulti,
                        "greedyAscent": greedyCoordinateAscentMulti,
                        "oracle": distributionalOracleOneVsAll,
-                       "gradientDescent": gradientDescentUntargeted}
+                       "gradientDescent": gradientDescentUntargeted,
+                       "gradientNonConvex": gradientDescentNonConvex}

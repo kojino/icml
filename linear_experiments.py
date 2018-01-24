@@ -15,7 +15,8 @@ def main(arguments):
     parser.add_argument("-exp_type", help="binary or multiclass experiments",
                         choices=["binary", "multiclass"], required=True)
     parser.add_argument("-noise_func", help="noise function used for the adversary",
-                        choices=["randomAscent", "greedyAscent", "oracle", "gradientDescent"], required=True)
+                        choices=["randomAscent", "greedyAscent", "oracle", "gradientDescent", "gradientNonConvex"],
+                        required=True)
     parser.add_argument("-iters", help="number of iterations for the MWU", type=int, required=True)
     parser.add_argument("-alpha", help="noise budget", type=float, required=True)
     parser.add_argument("-data_path", help="directory with experiment data + models", type=str, required=True)

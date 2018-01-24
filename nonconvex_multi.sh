@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH -t 4-0:00
+#SBATCH -t 1-0:00
 #SBATCH -p general
 #SBATCH -N 1
 #SBATCH -n 6
@@ -12,9 +12,9 @@ ALPHA=.5
 EXP_TYPE="multiclass"
 NUM_CLASSIFIERS=5
 NUM_POINTS=100
-NOISE_FUNC="oracle"
-ITERS=500
-DATA_PATH="multiclass_data"
+NOISE_FUNC="gradientNonConvex"
+ITERS=100
+DATA_PATH="multiclass_data_2"
 
 CMD="python -m linear_experiments -data_path $DATA_PATH -noise_func $NOISE_FUNC -iters $ITERS -num_classifiers $NUM_CLASSIFIERS -exp_type $EXP_TYPE -alpha $ALPHA"
 eval $CMD
