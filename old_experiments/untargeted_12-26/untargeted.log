@@ -1,0 +1,7 @@
+True Labels [505 595 915]
+99 (102.49477, 99.752602, 2.7421713, [array([ 0.99752599], dtype=float32)], array([ 1.], dtype=float32), [array([ 0.99824429], dtype=float32)], [array([ 0.00071832], dtype=float32)])
+99 (53.019558, 49.856602, 3.1629553, [array([ 0.99713206], dtype=float32)], array([ 1.], dtype=float32), [array([ 0.99795485], dtype=float32)], [array([ 0.0008228], dtype=float32)])
+99 (96.661812, 94.767471, 1.8943408, [array([ 0.94767469], dtype=float32)], array([ 1.], dtype=float32), [array([ 0.97242188], dtype=float32)], [array([ 0.02474717], dtype=float32)])
+99 (49.356163, 47.366924, 1.9892403, [array([ 0.94733846], dtype=float32)], array([ 1.], dtype=float32), [array([ 0.97224784], dtype=float32)], [array([ 0.02490937], dtype=float32)])
+99 (100.87915, 99.999985, 0.87916744, [array([ 0.99999982], dtype=float32)], array([ 1.], dtype=float32), [array([ 0.99999988], dtype=float32)], [array([  4.58402241e-08], dtype=float32)])
+99 (10002.438, 9999.998, 2.4390972, [array([ 0.99999982], dtype=float32)], array([ 1.], dtype=float32), [array([ 0.99999988], dtype=float32)], [array([  4.97544441e-08], dtype=float32)])

@@ -1,0 +1,921 @@
+multiclass CLASSIFICATION: 
+
+Noise Function gradientNonConvex
+Iters 100 
+Alpha 0.5
+Data path : multiclass_data_2
+Num Classifiers : 5
+Model 0, Test Accuracy 0.9023
+Model 1, Test Accuracy 0.9031
+Model 2, Test Accuracy 0.9014
+Model 3, Test Accuracy 0.9053
+Model 4, Test Accuracy 0.8993
+Num Points 100
+
+
+Running MWU for 100 Iterations with Epsilon 0.126863624118
+
+Guaranteed to be within 0.253727248236 of the minimax value 
+
+Iteration 0
+
+Weights [ 0.2  0.2  0.2  0.2  0.2] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.37
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.73  0.64  0.63  0.67]
+Loss 0.666 Loss Per Action [0.13199999999999998, 0.14599999999999999, 0.128, 0.126, 0.13399999999999998]
+time spent 66.4079818726
+
+Iteration 1
+
+Weights [ 0.20016061  0.19826879  0.20070444  0.20097691  0.19988925] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.375
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.73  0.64  0.62  0.67]
+Loss 0.663824543052 Loss Per Action [0.13210600342598516, 0.14473621941765769, 0.12845084067545307, 0.12460568174448709, 0.13392579778863456]
+time spent 68.1299090385
+
+Iteration 2
+
+Weights [ 0.20026195  0.19649429  0.20135164  0.20217279  0.19971933] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.376666666667
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.73  0.64  0.62  0.67]
+Loss 0.663637849418 Loss Per Action [0.13217288968004343, 0.14344083380421488, 0.12886504810133179, 0.12534712960714023, 0.13381194822541542]
+time spent 65.8572399616
+
+Iteration 3
+
+Weights [ 0.20035828  0.19473075  0.20199582  0.20337065  0.1995445 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.375
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.73  0.64  0.63  0.67]
+Loss 0.665485561789 Loss Per Action [0.1322364668063736, 0.14215344816209738, 0.12927732301174522, 0.12812350822397789, 0.13369481558466698]
+time spent 62.916821003
+
+Iteration 4
+
+Weights [ 0.20050522  0.19303171  0.20269317  0.20434979  0.19942012] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.376
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.73  0.64  0.62  0.67]
+Loss 0.66327856615 Loss Per Action [0.13233344384211565, 0.14091314963813675, 0.1297236281378023, 0.12669686745816622, 0.13361147707423499]
+time spent 66.4723820686
+
+Iteration 5
+
+Weights [ 0.20059191  0.19128994  0.20333175  0.20555054  0.19923586] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.376666666667
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.72  0.64  0.62  0.67]
+Loss 0.661181098332 Loss Per Action [0.1323906579001512, 0.13772875759317391, 0.1301323194453459, 0.12744133715680753, 0.1334880262364441]
+time spent 62.9409828186
+
+Iteration 6
+
+Weights [ 0.20062199  0.18976765  0.20391477  0.2067      0.19899559] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.377142857143
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.72  0.64  0.62  0.67]
+Loss 0.661029719744 Loss Per Action [0.13241051255033132, 0.13663270962717247, 0.13050545204681149, 0.12815399897221902, 0.13332704654752875]
+time spent 61.4391748905
+
+Iteration 7
+
+Weights [ 0.20064796  0.18825362  0.20449527  0.20785162  0.19875154] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.37625
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.72  0.64  0.63  0.67]
+Loss 0.662957278529 Loss Per Action [0.13242765432332793, 0.13554260429403145, 0.13087697049040192, 0.1309465193754939, 0.13316353004554621]
+time spent 60.2543129921
+
+Iteration 8
+
+Weights [ 0.20072671  0.18680077  0.20513135  0.20878119  0.19855998] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.376666666667
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.72  0.64  0.62  0.67]
+Loss 0.660739771813 Loss Per Action [0.13247962809278008, 0.13449655625792373, 0.13128406201495413, 0.12944433552407172, 0.1330351899235695]
+time spent 66.4629290104
+
+Iteration 9
+
+Weights [ 0.20074481  0.18530313  0.20570723  0.20993616  0.19830868] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.377
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.72  0.64  0.62  0.66]
+Loss 0.658606597016 Loss Per Action [0.13249157491542218, 0.13341825363609375, 0.13165262603224778, 0.13016041646203005, 0.13088372597034947]
+time spent 60.0236608982
+
+Iteration 10
+
+Weights [ 0.20070487  0.18376435  0.20622508  0.21103648  0.19826922] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.377272727273
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.72  0.64  0.62  0.66]
+Loss 0.658459899998 Loss Per Action [0.13246521293271493, 0.13231033102723622, 0.13198405402002553, 0.13084261811465661, 0.13085768390297356]
+time spent 65.5288341045
+
+Iteration 11
+
+Weights [ 0.20066095  0.18223473  0.20674014  0.21213836  0.19822583] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.3775
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.62  0.65]
+Loss 0.654509140855 Loss Per Action [0.13243622537885141, 0.12938665506018929, 0.13231368797663792, 0.13152578261746908, 0.12884678982205466]
+time spent 64.8644270897
+
+Iteration 12
+
+Weights [ 0.20050993  0.18086656  0.20714583  0.21313214  0.19834555] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.378461538462
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.61  0.65]
+Loss 0.652260348715 Loss Per Action [0.13233655404500669, 0.12841525457645356, 0.13257332860243465, 0.13001060652734125, 0.12892460496362809]
+time spent 60.730547905
+
+Iteration 13
+
+Weights [ 0.20029761  0.17945364  0.20748869  0.21435555  0.1984045 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.378571428571
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.62  0.65]
+Loss 0.654264640853 Loss Per Action [0.1321964258250532, 0.12741208210669283, 0.13279276398587994, 0.13290044233137518, 0.12896292660436187]
+time spent 59.7929811478
+
+Iteration 14
+
+Weights [ 0.20014024  0.17810045  0.20788897  0.21535259  0.19851775] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.378
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.63  0.65]
+Loss 0.65630148789 Loss Per Action [0.13209256051035784, 0.12645131855478947, 0.13304893858221553, 0.13567213160601777, 0.129036538636354]
+time spent 56.2903730869
+
+Iteration 15
+
+Weights [ 0.20003851  0.17680653  0.20834783  0.21612093  0.1986862 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.3775
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.63  0.65]
+Loss 0.656202880075 Loss Per Action [0.13202541556296143, 0.12553263666783204, 0.1333426116732285, 0.1361561837895264, 0.12914603238142827]
+time spent 66.9309308529
+
+Iteration 16
+
+Weights [ 0.19993416  0.17551967  0.20880492  0.21688911  0.19885214] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.376470588235
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.63  0.64  0.64]
+Loss 0.654197010808 Loss Per Action [0.13195654323070108, 0.12461896553471614, 0.13154709984817181, 0.13880903003469988, 0.12726537215967931]
+time spent 64.6227428913
+
+Iteration 17
+
+Weights [ 0.19977543  0.17419471  0.20949002  0.21730573  0.19923412] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.376111111111
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.63  0.64]
+Loss 0.654016081078 Loss Per Action [0.13185178090381894, 0.12367824556198351, 0.13407361209789198, 0.1369026085589363, 0.12750983395503213]
+time spent 64.7103331089
+
+Iteration 18
+
+Weights [ 0.19961192  0.17287551  0.20988727  0.21801337  0.19961192] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.375263157895
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.65  0.64  0.64]
+Loss 0.658192397146 Loss Per Action [0.13174386871530641, 0.12274161475240572, 0.13642672801335662, 0.13952855539563339, 0.12775163026938807]
+time spent 58.9722220898
+
+Iteration 19
+
+Weights [ 0.19956185  0.17166376  0.21011948  0.21855086  0.20010405] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.3745
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.65  0.64  0.64]
+Loss 0.658108895112 Loss Per Action [0.13171081907459609, 0.12188127101018156, 0.13657766405806218, 0.13987255052372974, 0.12806659044577934]
+time spent 67.8969461918
+
+Iteration 20
+
+Weights [ 0.19950953  0.17045858  0.21034957  0.2190872   0.20059512] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.37380952381
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.64  0.65]
+Loss 0.657928242205 Loss Per Action [0.13167628958037733, 0.1210255899768847, 0.1346237261425213, 0.14021580908680531, 0.13038682741805946]
+time spent 55.3179359436
+
+Iteration 21
+
+Weights [ 0.19945234  0.16925771  0.21086062  0.21961948  0.20080986] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.373181818182
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.64  0.64]
+Loss 0.655837086214 Loss Per Action [0.1316385433524877, 0.12017297152397888, 0.13495079671329585, 0.14055646571564567, 0.1285183089088752]
+time spent 60.9247720242
+
+Iteration 22
+
+Weights [ 0.19933852  0.16801755  0.21131287  0.22009051  0.20124055] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.372608695652
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.65  0.64  0.65]
+Loss 0.659873533389 Loss Per Action [0.13156342504719237, 0.1192924635367346, 0.13735336292856462, 0.14085792610523207, 0.13080635577149533]
+time spent 65.8297460079
+
+Iteration 23
+
+Weights [ 0.1993341   0.16687801  0.21159504  0.22068359  0.20150927] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.372083333333
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.65  0.64  0.65]
+Loss 0.659799185886 Loss Per Action [0.13156050384719109, 0.11848338914405607, 0.13753677389103702, 0.14123749463269233, 0.13098102437150644]
+time spent 57.4870741367
+
+Iteration 24
+
+Weights [ 0.19932767  0.16574453  0.21187545  0.22127603  0.20177632] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.3708
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.71  0.64  0.66  0.65]
+Loss 0.662031954396 Loss Per Action [0.13155625891984171, 0.11767861796940748, 0.13560028943814653, 0.14604218160914539, 0.13115460645977642]
+time spent 65.8128008842
+
+Iteration 25
+
+Weights [ 0.19938168  0.16466867  0.21250867  0.22133599  0.20210499] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.37
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.7   0.65  0.65  0.65]
+Loss 0.660227250247 Loss Per Action [0.13159190601591439, 0.11526806885061562, 0.13813063873934778, 0.14386839397098963, 0.13136824267027913]
+time spent 61.5030329227
+
+Iteration 26
+
+Weights [ 0.19938722  0.16378207  0.21280309  0.22164263  0.20238499] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.368888888889
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.7   0.64  0.66  0.65]
+Loss 0.660271370975 Loss Per Action [0.13159556752258572, 0.11464744601823049, 0.13619397657436444, 0.14628413821789255, 0.13155024264179419]
+time spent 58.2426009178
+
+Iteration 27
+
+Weights [ 0.19939389  0.16290115  0.2133884   0.22165005  0.20266651] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.368214285714
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.7   0.65  0.65  0.65]
+Loss 0.660138996399 Loss Per Action [0.13159996792016343, 0.11403080488193995, 0.13870245996841968, 0.14407252933234924, 0.13173323429657605]
+time spent 57.2913570404
+
+Iteration 28
+
+Weights [ 0.19939706  0.16202213  0.21368148  0.22195447  0.20294487] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.367586206897
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.7   0.65  0.65  0.65]
+Loss 0.660095076885 Loss Per Action [0.13160205716465934, 0.11341548850975779, 0.13889296129498196, 0.14427040619744047, 0.13191416371838693]
+time spent 54.3493769169
+
+Iteration 29
+
+Weights [ 0.19939904  0.16114689  0.21397369  0.22225799  0.20322239] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.366666666667
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.7   0.65  0.66  0.65]
+Loss 0.662273914702 Loss Per Action [0.13160336389482302, 0.11280282166326674, 0.13908289724345338, 0.14669027573030569, 0.13209455617002061]
+time spent 53.6286690235
+
+Iteration 30
+
+Weights [ 0.19946002  0.1603238   0.2143297   0.22232597  0.20356052] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.365806451613
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.7   0.65  0.66  0.65]
+Loss 0.662234049988 Loss Per Action [0.13164361192753865, 0.11222666201570683, 0.13931430327380034, 0.1467351377675814, 0.13231433500321724]
+time spent 60.7836000919
+
+Iteration 31
+
+Weights [ 0.19951994  0.15950406  0.21468514  0.22239276  0.2038981 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.365
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.7   0.65  0.66  0.65]
+Loss 0.662194330041 Loss Per Action [0.13168316139349567, 0.11165284245732492, 0.13954534099856497, 0.14677922115492445, 0.13253376403666545]
+time spent 54.9657611847
+
+Iteration 32
+
+Weights [ 0.19957881  0.15868766  0.21504002  0.22245838  0.20423514] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.364242424242
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.66  0.65]
+Loss 0.658981001541 Loss Per Action [0.1317220142409897, 0.10790760625757603, 0.13977601005374229, 0.14682252806398155, 0.13275284292465028]
+time spent 51.041520834
+
+Iteration 33
+
+Weights [ 0.19955103  0.15823565  0.21530197  0.22242741  0.20448394] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.363529411765
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.66  0.65]
+Loss 0.658966853893 Loss Per Action [0.13170367970453969, 0.10760024149885829, 0.13994628180018182, 0.1468020916698983, 0.13291455921917683]
+time spent 52.446171999
+
+Iteration 34
+
+Weights [ 0.19952287  0.15778463  0.21556383  0.22239603  0.20473264] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.363428571429
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.64  0.65]
+Loss 0.654504807278 Loss Per Action [0.13168509516642518, 0.10729354646593064, 0.14011649224361988, 0.14233345611068654, 0.13307621729092442]
+time spent 57.8728489876
+
+Iteration 35
+
+Weights [ 0.19937388  0.15723959  0.21569529  0.22283375  0.20485749] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.362777777778
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.66  0.65]
+Loss 0.658939264051 Loss Per Action [0.13158676251543547, 0.10692292287962066, 0.14020193757551705, 0.14707027173216167, 0.13315736934784478]
+time spent 58.9597740173
+
+Iteration 36
+
+Weights [ 0.199345    0.15679082  0.21595682  0.22280147  0.20510588] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.362162162162
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.66  0.65]
+Loss 0.658925189413 Loss Per Action [0.1315677024844745, 0.10661775972913817, 0.14037193404784556, 0.1470489689515547, 0.13331882419964738]
+time spent 59.9983201027
+
+Iteration 37
+
+Weights [ 0.19931575  0.15634304  0.21621826  0.22276877  0.20535418] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.361578947368
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.66  0.65]
+Loss 0.658911136286 Loss Per Action [0.13154839422555645, 0.10631326468772391, 0.1405418684949398, 0.14702738873458249, 0.13348022014272734]
+time spent 53.5204398632
+
+Iteration 38
+
+Weights [ 0.19928612  0.15589623  0.2164796   0.22273565  0.2056024 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.361538461538
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.64  0.65]
+Loss 0.654442391586 Loss Per Action [0.13152883823258363, 0.10600943731689226, 0.1407117406034612, 0.14255081855346791, 0.13364155687949031]
+time spent 57.3503379822
+
+Iteration 39
+
+Weights [ 0.19913562  0.15535641  0.21660978  0.22317215  0.20572604] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.36125
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.65  0.66]
+Loss 0.65870930875 Loss Per Action [0.13142951074188639, 0.10564235598808271, 0.14079635818981978, 0.14506190069785169, 0.13577918313215329]
+time spent 57.8489840031
+
+Iteration 40
+
+Weights [ 0.19910057  0.15490818  0.21686566  0.22343578  0.20568982] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.360975609756
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.68  0.65  0.65  0.66]
+Loss 0.658695149165 Loss Per Action [0.13140637324130552, 0.10533756080978113, 0.14096267697339537, 0.14523325824699157, 0.1357552798937493]
+time spent 58.8151950836
+
+Iteration 41
+
+Weights [ 0.19906513  0.15446095  0.21712142  0.22369929  0.20565321] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.360714285714
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.65  0.65]
+Loss 0.655079870252 Loss Per Action [0.13138298763338555, 0.10348883394820207, 0.1411289213374525, 0.14540453912201193, 0.13367458821055347]
+time spent 62.0795331001
+
+Iteration 42
+
+Weights [ 0.1989322   0.15414854  0.21727099  0.22385339  0.20579488] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.36023255814
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659368775489 Loss Per Action [0.13129525360174826, 0.1032795191683324, 0.14122614168639303, 0.14774323876274739, 0.1358246222694019]
+time spent 57.9712588787
+
+Iteration 43
+
+Weights [ 0.1989151   0.15392632  0.21754724  0.22383415  0.20577719] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.359772727273
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.65]
+Loss 0.657306018894 Loss Per Action [0.13128396633713779, 0.10313063477996216, 0.14140570656989196, 0.14773053748844711, 0.13375517371810894]
+time spent 56.0998420715
+
+Iteration 44
+
+Weights [ 0.19884232  0.1536614   0.21776287  0.22375225  0.20598115] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.359333333333
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659358985284 Loss Per Action [0.13123593316203722, 0.10295313749704248, 0.14154586603842659, 0.14767648696748203, 0.13594756161922128]
+time spent 62.6352639198
+
+Iteration 45
+
+Weights [ 0.19882496  0.15343968  0.21803946  0.22373272  0.20596317] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.358913043478
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659354002219 Loss Per Action [0.13122447672259183, 0.10280458707876056, 0.14172564922127193, 0.14766359532500509, 0.13593569387103743]
+time spent 64.2344949245
+
+Iteration 46
+
+Weights [ 0.19880747  0.15321818  0.21831625  0.22371304  0.20594505] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.358510638298
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659349019279 Loss Per Action [0.13121293258175024, 0.10265618160611933, 0.14190556482422714, 0.14765060499435806, 0.13592373527280452]
+time spent 58.2698948383
+
+Iteration 47
+
+Weights [ 0.19878985  0.1529969   0.21859325  0.22369321  0.2059268 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.358125
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659344036467 Loss Per Action [0.13120130076508918, 0.10250792107214379, 0.14208561277443157, 0.14763751600432182, 0.13591168585101751]
+time spent 52.0945129395
+
+Iteration 48
+
+Weights [ 0.19877209  0.15277583  0.21887045  0.22367322  0.2059084 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.357755102041
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659339053783 Loss Per Action [0.13118958129837846, 0.10235980546958176, 0.14226579299869238, 0.14762432838389444, 0.13589954563237153]
+time spent 53.4779758453
+
+Iteration 49
+
+Weights [ 0.1987542   0.15255498  0.21914785  0.22365309  0.20588987] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.3574
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659334071228 Loss Per Action [0.13117777420758076, 0.10221183479090422, 0.14244610542348454, 0.1476110421622911, 0.13588731464376122]
+time spent 62.8961060047
+
+Iteration 50
+
+Weights [ 0.19873618  0.15233434  0.21942546  0.22363281  0.2058712 ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.357058823529
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659329088803 Loss Per Action [0.13116587951885167, 0.1020640090283058, 0.14262654997495072, 0.14759765736894404, 0.13587499291228147]
+time spent 59.0315549374
+
+Iteration 51
+
+Weights [ 0.19871803  0.15211392  0.21970327  0.22361238  0.20585239] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.356923076923
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.65  0.66]
+Loss 0.657087982661 Loss Per Action [0.13115389725853965, 0.10191632817370501, 0.14280712657890124, 0.14534805018451002, 0.13586258046522628]
+time spent 66.4771921635
+
+Iteration 52
+
+Weights [ 0.19863944  0.15184763  0.21991453  0.2238274   0.20577099] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.356603773585
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659319330958 Loss Per Action [0.13110203295657674, 0.10173791085971909, 0.14294444603751166, 0.14772608697134562, 0.13580885413268115]
+time spent 56.6321930885
+
+Iteration 53
+
+Weights [ 0.19862103  0.15162771  0.22019267  0.22380666  0.20575192] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.356296296296
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659314350422 Loss Per Action [0.13108988300964222, 0.10159056737883393, 0.14312523567335794, 0.14771239638183251, 0.13579626797872354]
+time spent 60.3535940647
+
+Iteration 54
+
+Weights [ 0.19860249  0.15140801  0.22047101  0.22378577  0.20573271] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.356
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659309370021 Loss Per Action [0.13107764562372223, 0.10144336874834042, 0.14330615713631187, 0.14769860726585962, 0.13578359124654865]
+time spent 56.0614249706
+
+Iteration 55
+
+Weights [ 0.19858382  0.15118853  0.22074955  0.22376473  0.20571337] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.355714285714
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659304389754 Loss Per Action [0.13106532082590408, 0.10129631495897597, 0.14348721035098833, 0.14768471965394905, 0.1357708239642163]
+time spent 62.2598359585
+
+Iteration 56
+
+Weights [ 0.19856501  0.15096926  0.2210283   0.22374354  0.20569389] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.355438596491
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.66  0.66]
+Loss 0.661509692627 Loss Per Action [0.13105290864346736, 0.10114940600120388, 0.14587867824538747, 0.14767073357683946, 0.13575796615998542]
+time spent 65.0943949223
+
+Iteration 57
+
+Weights [ 0.19860566  0.15079545  0.22107355  0.22378934  0.205736  ] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.355172413793
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.66  0.66]
+Loss 0.661507954548 Loss Per Action [0.13107973691050664, 0.1010329547465218, 0.1459085415439271, 0.14770096373285274, 0.13578575761464723]
+time spent 52.8982510567
+
+Iteration 58
+
+Weights [ 0.19864627  0.15062181  0.22111875  0.2238351   0.20577806] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.355084745763
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.65  0.66]
+Loss 0.659267867127 Loss Per Action [0.13110653977016939, 0.10091661377555169, 0.14593837656080139, 0.14549281427098848, 0.13581352274975761]
+time spent 60.0842368603
+
+Iteration 59
+
+Weights [ 0.19862648  0.15040262  0.22109672  0.22411663  0.20575756] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.354833333333
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.66  0.66]
+Loss 0.661504026209 Loss Per Action [0.13109347390130047, 0.10076975601511828, 0.14592383257470862, 0.14791697592758904, 0.13579998779046437]
+time spent 58.4110040665
+
+Iteration 60
+
+Weights [ 0.19866698  0.15022935  0.22114181  0.22416234  0.20579952] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.354590163934
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.66  0.66]
+Loss 0.6615022935 Loss Per Action [0.13112020972476901, 0.10065366450527261, 0.14595359297170982, 0.1479471428156782, 0.13582768348264901]
+time spent 60.8299069405
+
+Iteration 61
+
+Weights [ 0.19870745  0.15005624  0.22118686  0.224208    0.20584144] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.35435483871
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.66  0.66]
+Loss 0.661500562435 Loss Per Action [0.13114692018738133, 0.10053768311659403, 0.14598332513882875, 0.14797728108829894, 0.13585535290347286]
+time spent 58.8479421139
+
+Iteration 62
+
+Weights [ 0.19874789  0.1498833   0.22123186  0.22425362  0.20588333] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.354126984127
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.66  0.66]
+Loss 0.661498833012 Loss Per Action [0.13117360530066047, 0.10042181179904779, 0.14601302908889199, 0.14800739075845315, 0.13588299606487259]
+time spent 60.3747098446
+
+Iteration 63
+
+Weights [ 0.19878828  0.14971052  0.22127683  0.2242992   0.20592517] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.35390625
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.65  0.66  0.66]
+Loss 0.659284336976 Loss Per Action [0.13120026507615418, 0.1003060505024915, 0.14382993657968168, 0.14803747183917046, 0.1359106129788106]
+time spent 69.3550159931
+
+Iteration 64
+
+Weights [ 0.19876891  0.14949299  0.22155563  0.22427735  0.20590511] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.353692307692
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.67  0.66  0.66  0.66]
+Loss 0.661494929931 Loss Per Action [0.13118748337622468, 0.10016030534882753, 0.14622671897811784, 0.14802304983672807, 0.13589737239068131]
+time spent 57.5050339699
+
+Iteration 65
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.353484848485
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669131, 0.098551586695806936, 0.14625636074759119, 0.14805305574228808, 0.13592492028762243]
+time spent 61.6535480022
+
+Iteration 66
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.35328358209
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669131, 0.098551586695806936, 0.14625636074759119, 0.14805305574228805, 0.13592492028762243]
+time spent 57.5008790493
+
+Iteration 67
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.353088235294
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669131, 0.098551586695806936, 0.14625636074759116, 0.14805305574228805, 0.13592492028762243]
+time spent 57.9009110928
+
+Iteration 68
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.352898550725
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669131, 0.098551586695806936, 0.14625636074759113, 0.14805305574228805, 0.13592492028762243]
+time spent 59.2659239769
+
+Iteration 69
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.352714285714
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 59.8238010406
+
+Iteration 70
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.352535211268
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 77.8916909695
+
+Iteration 71
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.352361111111
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 104.607040882
+
+Iteration 72
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.352191780822
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.497014999
+
+Iteration 73
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.352027027027
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.253862143
+
+Iteration 74
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.351866666667
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.252429962
+
+Iteration 75
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.351710526316
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.278574944
+
+Iteration 76
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.351558441558
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.260446072
+
+Iteration 77
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.35141025641
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.326883793
+
+Iteration 78
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.351265822785
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 104.302775145
+
+Iteration 79
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.351125
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.13431716
+
+Iteration 80
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350987654321
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.309361935
+
+Iteration 81
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350853658537
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.229865074
+
+Iteration 82
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350722891566
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.165822029
+
+Iteration 83
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350595238095
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.172406912
+
+Iteration 84
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350470588235
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 104.17232585
+
+Iteration 85
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350348837209
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.242428064
+
+Iteration 86
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350229885057
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.286664963
+
+Iteration 87
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.350113636364
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.208822966
+
+Iteration 88
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.35
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.284575939
+
+Iteration 89
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349888888889
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.51099205
+
+Iteration 90
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.34978021978
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.42739296
+
+Iteration 91
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349673913043
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.388974905
+
+Iteration 92
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349569892473
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.898831129
+
+Iteration 93
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349468085106
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 105.669366121
+
+Iteration 94
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349368421053
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 63.375
+
+Iteration 95
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349270833333
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 63.1742310524
+
+Iteration 96
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349175257732
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 63.1999769211
+
+Iteration 97
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.349081632653
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 63.0004608631
+
+Iteration 98
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.34898989899
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 61.8284380436
+
+Iteration 99
+
+Weights [ 0.19880921  0.14932059  0.22160055  0.22432281  0.20594685] Sum of Weights 1.0
+Maximum (Average) Accuracy of Classifier 0.3489
+Cost (Before Noise) [ 0.  0.  0.  0.  0.]
+Cost (After Noise), [ 0.66  0.66  0.66  0.66  0.66]
+Loss 0.66 Loss Per Action [0.13121407652669134, 0.098551586695806964, 0.14625636074759116, 0.14805305574228808, 0.13592492028762237]
+time spent 61.5563421249
+
+finished running MWU 
+Success

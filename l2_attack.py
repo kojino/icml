@@ -95,7 +95,7 @@ class CarliniL2:
         self.outputs = [model(self.newimg) for model in models]
         
         # distance to the input data
-        self.l2dist = tf.reduce_sum(tf.square(self.newimg-(tf.tanh(self.timg) * self.boxmul + self.boxplus)), [1, 2, 3])
+        # self.l2dist = tf.reduce_sum(tf.square(self.newimg-(tf.tanh(self.timg) * self.boxmul + self.boxplus)), [1, 2, 3])
         
         # compute the probability of the label class versus the maximum other
         reals = []
@@ -123,7 +123,7 @@ class CarliniL2:
         self.loss1list = loss1list  # TODO: remove
 
         # sum up the losses
-        self.loss2 = tf.reduce_sum(self.l2dist)
+        # self.loss2 = tf.reduce_sum(self.l2dist)
         self.loss1 = tf.reduce_sum(self.const * tf.add_n(self.loss1list))
         self.loss = self.loss1 + self.loss2
         self.reals = reals
