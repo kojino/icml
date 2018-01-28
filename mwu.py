@@ -3,8 +3,12 @@ import time
 import logging as log
 
 
-def evaluateCosts(models, V, X, Y):
-    return np.array([1 - model.evaluate(X + V, Y) for model in models])
+def evaluateCosts(models, V, X, Y, targeted=False):
+    if targeted:
+        res = np.array([model.evaluate(X + V, Y) for model in models])
+    else:
+        res = np.array([1 - model.evaluate(X + V, Y) for model in models])
+    return res
 
 
 def adversary(distribution, models, X, Y, alpha, noiseFunc):
