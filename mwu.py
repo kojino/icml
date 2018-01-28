@@ -3,19 +3,24 @@ import time
 import logging as log
 
 
-def evaluateCosts(models, V, X, Y, targeted=False):
-    if targeted:
-        res = np.array([model.evaluate(X + V, Y) for model in models])
+def evaluateCosts(models, V, X, Y, targets):
+    if targets is not False:
+        res = np.array([model.evaluate(X + V, targets) for model in models])
     else:
         res = np.array([1 - model.evaluate(X + V, Y) for model in models])
     return res
 
 
-def adversary(distribution, models, X, Y, alpha, noiseFunc):
-    return np.array([noiseFunc(distribution, models, x, y, alpha) for x, y in zip(X,Y)])
+def adversary(distribution, models, X, Y, alpha, noiseFunc, targets):
+    if targets is not False:
+        res = np.array([noiseFunc(distribution, models, x, y, alpha, target=target) for x, y, target
+                        in zip(X, Y, targets)])
+    else:
+        res = np.array([noiseFunc(distribution, models, x, y, alpha) for x, y in zip(X, Y)])
+    return res
 
 
-def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None):
+def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=False):
     num_models = len(models)
 
     if epsilon is None:
@@ -30,7 +35,7 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None):
 
     loss_history = []
     costs = []
-    max_acc_history = []
+    acc_history = []
     v = []
     w = []
     action_loss = []
@@ -44,27 +49,38 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None):
             np.save(exp_dir + "/" + "weights_{}.npy".format(t), w)
             np.save(exp_dir + "/" + "noise_{}.npy".format(t), v)
             np.save(exp_dir + "/" + "loss_history_{}.npy".format(t), loss_history)
-            np.save(exp_dir + "/" + "max_acc_history_{}.npy".format(t), max_acc_history)
+            np.save(exp_dir + "/" + "acc_history_{}.npy".format(t), acc_history)
             np.save(exp_dir + "/" + "action_loss_{}.npy".format(t), action_loss)
 
         start_time = time.time()
 
-        v_t = adversary(w[t], models, X, Y, alpha, noiseFunc)
+        v_t = adversary(w[t], models, X, Y, alpha, noiseFunc, targeted)
         v.append(v_t)
 
-        cost_t = evaluateCosts(models, v_t, X, Y)
+        cost_t = evaluateCosts(models, v_t, X, Y, targeted)
         costs.append(cost_t)
 
-        avg_acc = np.mean((1 - np.array(costs)), axis=0)
-        max_acc = max(avg_acc)
-        max_acc_history.append(max_acc)
+        if targeted is not False:
+            avg_loss = np.mean((np.array(costs)), axis=0)
+            min_loss = min(avg_loss)
+            acc_history.append(min_loss)
+        else:
+            avg_acc = np.mean((1 - np.array(costs)), axis=0)
+            max_acc = max(avg_acc)
+            acc_history.append(max_acc)
 
         loss = np.dot(w[t], cost_t)
         individual = [w[t][j] * cost_t[j] for j in xrange(num_models)]
 
         log.debug("Weights {} Sum of Weights {}".format(w[t], sum(w[t])))
-        log.debug("Maximum (Average) Accuracy of Classifier {}".format(max_acc))
-        log.debug("Cost (Before Noise) {}".format(np.array([1 - model.evaluate(X, Y) for model in models])))
+
+        if targeted is not False:
+            log.debug("Minimum (Average) Loss of Classifier {}".format(acc_history[-1]))
+            log.debug("Cost (Before Noise) {}".format(np.array([model.evaluate(X, targeted) for model in models])))
+        else:
+            log.debug("Maximum (Average) Accuracy of Classifier {}".format(acc_history[-1]))
+            log.debug("Cost (Before Noise) {}".format(np.array([1 - model.evaluate(X, Y) for model in models])))
+
         log.debug("Cost (After Noise), {}".format(cost_t))
         log.debug("Loss {} Loss Per Action {}".format(loss, individual))
 
@@ -87,4 +103,4 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None):
 
         log.debug("time spent {}\n".format(time.time() - start_time))
     log.debug("finished running MWU ")
-    return w, v, loss_history, max_acc_history, action_loss
+    return w, v, loss_history, acc_history, action_loss

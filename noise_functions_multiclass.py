@@ -39,15 +39,15 @@ def tryRegionOneVsAll(models, labels, x, delta=1e-10):
         return None
 
 
-def distributionalOracleOneVsAll(distribution, models, x, y, alpha):
-    candidates = []
-    # we should only take into consideration models that we could feasibly trick
-
+def distributionalOracleOneVsAll(distribution, models, x, y, alpha, target=False):
     num_models = len(models)
 
     labels_values = []
     for labels in product(range(10), repeat=num_models):  # iterate over all possible regions
-        is_misclassified = (np.array(labels) != y).astype(np.float32)
+        if target:
+            is_misclassified = (np.array(labels) == target).astype(np.float32)
+        else:
+            is_misclassified = (np.array(labels) != y).astype(np.float32)
         value = np.dot(is_misclassified, distribution)
         labels_values.append((labels, value))
 
@@ -68,23 +68,30 @@ def distributionalOracleOneVsAll(distribution, models, x, y, alpha):
     return np.zeros(x.shape[0])  # we can't trick anything
 
 
-def coordinateAscentMulti(distribution, models, x, y, alpha, greedy=False):
+def coordinateAscentMulti(distribution, models, x, y, alpha, target=False, greedy=False):
+    # targeted needs to be the target label
     num_models = len(models)
 
     sol = np.zeros(x.shape)
 
     labels = [y] * num_models  # initialize to the original point, of length feasible_models
-    label_options = range(10)
-    del label_options[y]
 
     model_options = dict(zip(range(num_models), distribution))
     for i in xrange(num_models):
-        if greedy:
+        if greedy:  # select model with the highest probability weight
             coord = max(model_options, key=model_options.get)
-            labels[coord] = greedy[y]
-        else:
+            if target:
+                labels[coord] = target
+            else:
+                labels[coord] = greedy[y]
+        else:  # random: select a random model
             coord = np.random.choice(model_options.keys())
-            labels[coord] = np.random.choice(label_options)
+            if target:
+                labels[coord] = target
+            else:
+                label_options = range(10)
+                del label_options[y]
+                labels[coord] = np.random.choice(label_options)
 
         del model_options[coord]
 
@@ -105,8 +112,7 @@ def gradientDescentTargeted(distribution, models, x, target, alpha, learning_rat
     best_sol = (sys.maxint, v)
     loss_queue = []
     for i in xrange(T):
-        gradient = \
-        sum([-1 * p * model.gradient(np.array([x + v]), [target]) for p, model in zip(distribution, models)])[0]
+        gradient = sum([-1 * p * model.gradient(np.array([x + v]), [target]) for p, model in zip(distribution, models)])[0]
 
         v += learning_rate * gradient
         norm = np.linalg.norm(v)
@@ -127,20 +133,23 @@ def gradientDescentTargeted(distribution, models, x, target, alpha, learning_rat
 
         if loss == 0:
             break
-
     return best_sol
 
 
-def gradientDescentUntargeted(distribution, models, x, y, alpha):
-    targets = range(10)
-    del targets[y]
-    noise_options = []
-    for target in targets:
-        sol = gradientDescentTargeted(distribution, models, x, target, alpha)
-        noise_options.append(sol)
-        if sol[0] == 0:
-            return sol[1]
-    return min(noise_options, key=lambda x:x[0])[1]
+def gradientDescentMulti(distribution, models, x, y, alpha, target=False):
+
+    if target:
+        return gradientDescentTargeted(distribution, models, x, target, alpha)[1]
+    else:
+        targets = range(10)
+        del targets[y]
+        noise_options = []
+        for target in targets:
+            sol = gradientDescentTargeted(distribution, models, x, target, alpha)
+            noise_options.append(sol)
+            if sol[0] == 0:
+                return sol[1]
+        return min(noise_options, key=lambda x: x[0])[1]
 
 
 def gradientDescentNonConvex(distribution, models, x, y, alpha, learning_rate=.001, T=3000, early_stop=5):
@@ -178,5 +187,6 @@ randomCoordinateAscentMulti = partial(coordinateAscentMulti, greedy=False)
 FUNCTION_DICT_MULTI = {"randomAscent": randomCoordinateAscentMulti,
                        "greedyAscent": greedyCoordinateAscentMulti,
                        "oracle": distributionalOracleOneVsAll,
-                       "gradientDescent": gradientDescentUntargeted,
+                       "gradientDescent": gradientDescentMulti,
                        "gradientNonConvex": gradientDescentNonConvex}
+

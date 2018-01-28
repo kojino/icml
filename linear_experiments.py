@@ -9,9 +9,11 @@ from mwu import runMWU
 import sys
 import datetime
 
+
 def main(arguments):
     parser = argparse.ArgumentParser(description="linear classification experiments argument parser")
-
+    parser.add_argument("-noise_type", help="targeted or untargeted noise", choices=["targeted", "untargeted"],
+                        default="untargeted", type=str)
     parser.add_argument("-exp_type", help="binary or multiclass experiments",
                         choices=["binary", "multiclass"], required=True)
     parser.add_argument("-noise_func", help="noise function used for the adversary",
@@ -24,7 +26,7 @@ def main(arguments):
     args = parser.parse_args(arguments)
 
     date = datetime.datetime.now()
-    exp_name = "{}-{}-{}-{}".format(args.exp_type, args.noise_func, date.month, date.day)
+    exp_name = "{}-{}-{}-{}-{}".format(args.exp_type, args.noise_type, args.noise_func, date.month, date.day)
     log_file = exp_name + ".log"
 
     if not os.path.exists(exp_name):
@@ -38,6 +40,7 @@ def main(arguments):
     log.getLogger().addHandler(file_handler)
 
     log.debug("{} CLASSIFICATION: \n".format(args.exp_type))
+    log.debug("Noise Type {}".format(args.noise_type))
     log.debug("Noise Function {}".format(args.noise_func))
     log.debug("Iters {} ".format(args.iters))
     log.debug("Alpha {}".format(args.alpha))
@@ -62,6 +65,11 @@ def main(arguments):
     X_exp = np.load(args.data_path + "/" + "X_exp.npy")
     Y_exp = np.load(args.data_path + "/" + "Y_exp.npy")
 
+    if args.noise_type == "targeted":
+        Target_exp =  np.load(args.data_path + "/" + "Target_exp.npy")
+    else:
+        Target_exp = False
+
     log.debug("Num Points {}\n".format(X_exp.shape[0]))
 
     if args.exp_type == "binary":
@@ -69,13 +77,13 @@ def main(arguments):
     else:
         noise_func = FUNCTION_DICT_MULTI[args.noise_func]
 
-    weights, noise, loss_history, max_acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
-                                                                        noise_func, exp_name)
+    weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
+                                                                    noise_func, exp_name, targeted=Target_exp)
 
     np.save(exp_name + "/" + "weights.npy", weights)
     np.save(exp_name + "/" + "noise.npy", noise)
     np.save(exp_name + "/" + "loss_history.npy", loss_history)
-    np.save(exp_name + "/" + "max_acc_history.npy", max_acc_history)
+    np.save(exp_name + "/" + "acc_history.npy", acc_history)
     np.save(exp_name + "/" + "action_loss.npy", action_loss)
 
     log.debug("Success")
