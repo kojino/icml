@@ -10,7 +10,7 @@ import logging as log
 from keras.applications.imagenet_utils import preprocess_input
 from keras.models import Model
 import numpy as np
-from l2_attack import CarliniL2
+from noise_functions_dl import GradientDescentDL
 import tensorflow as tf
 import os
 import sys
@@ -76,8 +76,8 @@ def main(arguments):
         num_models = len(models)
         weights = [1.0 / num_models] * num_models
 
-        carlini = CarliniL2(sess, models, targeted=args.targeted, batch_size=1, max_iterations=100,
-                            binary_search_steps=2, confidence=0, abort_early=False, learning_rate=1e-2)
+        carlini = GradientDescentDL(sess, models, targeted=args.targeted, batch_size=1, max_iterations=100,
+                                    binary_search_steps=2, confidence=0, abort_early=False, learning_rate=1e-2)
 
         untargeted_adv = carlini.attack(X_exp, Y_true_exp, weights)
 

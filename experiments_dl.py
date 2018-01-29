@@ -3,7 +3,7 @@ import numpy as np
 from setup_mnist import MNIST, MNISTModel
 from scipy.misc import imsave
 import tensorflow as tf
-from l2_attack import CarliniL2
+from noise_functions_dl import GradientDescentDL
 from helper import generate_data, shuffleArraysInUnison
 import time
 import os
@@ -45,8 +45,8 @@ if __name__ == "__main__":
         time.sleep(500m)
 
 
-        untargeted = CarliniL2(sess, models, targeted=False, batch_size=1,
-                            max_iterations=4000, binary_search_steps=9, confidence=0)
+        untargeted = GradientDescentDL(sess, models, targeted=False, batch_size=1,
+                                       max_iterations=4000, binary_search_steps=9, confidence=0)
 
         num_untargeted = 50
         unt_inputs, unt_labels = generate_data(num_untargeted, inputs, labels, models)
@@ -78,8 +78,8 @@ if __name__ == "__main__":
             print row
 
 
-        targeted = CarliniL2(sess, models, targeted=True, batch_size=1,
-                             max_iterations=4000, binary_search_steps=9, confidence=0)
+        targeted = GradientDescentDL(sess, models, targeted=True, batch_size=1,
+                                     max_iterations=4000, binary_search_steps=9, confidence=0)
 
         num_targeted = 8
         t_inputs, t_labels = generate_data(num_targeted, inputs, labels, models, target_dict=TARGET_DICT)
