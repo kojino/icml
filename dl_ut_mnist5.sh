@@ -8,7 +8,7 @@
 #SBATCH --mail-type=all
 #SBATCH --mail-user=jperdomo@college.harvard.edu
 
-NOISE_TYPE="targeted"
+NOISE_TYPE="untargeted"
 ALPHA=.5
 EXP_TYPE="multiclass"
 MWU_ITERS=20

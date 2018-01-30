@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-#SBATCH -t 2-00:00
+#SBATCH -t 3-00:00
 #SBATCH -p holyseasgpu
 #SBATCH --gres=gpu:1
-#SBATCH --mem=5000
+#SBATCH --mem=8000
 #SBATCH --constraint=cuda-7.5
 #SBATCH --mail-type=all
 #SBATCH --mail-user=jperdomo@college.harvard.edu
@@ -11,8 +11,8 @@
 NOISE_TYPE="untargeted"
 ALPHA=2.2
 EXP_TYPE="multiclass"
-MWU_ITERS=100
-OPT_ITERS=5000
+MWU_ITERS=20
+OPT_ITERS=3000
 LR=.001
 DATA_PATH="multiclass_data_2"
 
