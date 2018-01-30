@@ -10,7 +10,7 @@ import gzip
 import os
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
-from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Conv2D, MaxPooling2D, Dropout
 from keras.optimizers import SGD
 
 OPTIMIZER = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
@@ -90,6 +90,7 @@ def multilayer(num_layers, nodes_per_layer, restore=None):
         for p in [nodes_per_layer] * num_layers:
             model.add(Dense(p))
             model.add(Activation('relu'))
+            model.add(Dropout(.1))
         model.add(Dense(10))
         model.add(Activation('softmax'))
 

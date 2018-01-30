@@ -68,7 +68,7 @@ def main(arguments):
 
         log.debug("Num Points {}\n".format(X_exp.shape[0]))
         target_bool = args.noise_type == "targeted"
-        # initialize the attack object
+        # initialize the attack object_
         attack_obj = GradientDescentDL(sess, models, args.alpha, (28, 1, 10), -.5, .5, # TODO: add these paramaters as variables
                                        targeted=target_bool, batch_size=1, max_iterations=args.opt_iters,
                                        learning_rate=args.learning_rate, confidence=0)
