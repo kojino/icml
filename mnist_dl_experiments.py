@@ -76,8 +76,9 @@ def main(arguments):
         log.debug("starting attack!")
         noise_func = partial(gradientDescentFunc, attack=attack_obj)
         targeted = Target_exp if target_bool else False
-        weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
-                                                                        noise_func, exp_name, targeted=targeted)
+        weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.mwu_iters, X_exp, Y_exp, args.alpha,
+                                                                        noise_func, exp_name, targeted=targeted,
+                                                                        dl=True)
 
         np.save(exp_name + "/" + "weights.npy", weights)
         np.save(exp_name + "/" + "noise.npy", noise)

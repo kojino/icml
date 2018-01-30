@@ -3,11 +3,17 @@ import time
 import logging as log
 
 
-def evaluateCosts(models, V, X, Y, targets):
+def evaluateCosts(models, V, X, Y, targets, dl=False):
     if targets is not False:
-        res = np.array([model.evaluate(X + V, targets) for model in models])
+        if dl:
+            res = np.array([model.evaluate(X + V, targets)[1] for model in models])
+        else:
+            res = np.array([model.evaluate(X + V, targets) for model in models])
     else:
-        res = np.array([1 - model.evaluate(X + V, Y) for model in models])
+        if dl:
+            res = np.array([1 - model.evaluate(X + V, Y)[1] for model in models])
+        else:
+            res = np.array([1 - model.evaluate(X + V, Y) for model in models])
     return res
 
 
@@ -20,7 +26,7 @@ def adversary(distribution, models, X, Y, alpha, noiseFunc, targets):
     return res
 
 
-def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=False):
+def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=False, dl=False):
     num_models = len(models)
 
     if epsilon is None:
@@ -57,7 +63,7 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=Fa
         v_t = adversary(w[t], models, X, Y, alpha, noiseFunc, targeted)
         v.append(v_t)
 
-        cost_t = evaluateCosts(models, v_t, X, Y, targeted)
+        cost_t = evaluateCosts(models, v_t, X, Y, targeted, dl=dl)
         costs.append(cost_t)
 
         if targeted is not False:
@@ -76,10 +82,17 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=Fa
 
         if targeted is not False:
             log.debug("Minimum (Average) Loss of Classifier {}".format(acc_history[-1]))
-            log.debug("Cost (Before Noise) {}".format(np.array([model.evaluate(X, targeted) for model in models])))
+            if dl:
+                log.debug("Cost (Before Noise) {}".format(np.array([model.evaluate(X, targeted)[1] for model in models])))
+            else:
+                log.debug("Cost (Before Noise) {}".format(np.array([model.evaluate(X, targeted) for model in models])))
+
         else:
             log.debug("Maximum (Average) Accuracy of Classifier {}".format(acc_history[-1]))
-            log.debug("Cost (Before Noise) {}".format(np.array([1 - model.evaluate(X, Y) for model in models])))
+            if dl:
+                log.debug("Cost (Before Noise) {}".format(np.array([1 - model.evaluate(X, Y)[1] for model in models])))
+            else:
+                log.debug("Cost (Before Noise) {}".format(np.array([1 - model.evaluate(X, Y) for model in models])))
 
         log.debug("Cost (After Noise), {}".format(cost_t))
         log.debug("Loss {} Loss Per Action {}".format(loss, individual))

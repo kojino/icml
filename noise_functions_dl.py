@@ -197,11 +197,11 @@ class GradientDescentDL:
             norm, loss_list, scores, nimg, loss = self.sess.run([self.norm, self.loss1list, self.outputs, self.newimg,
                                                                  self.loss], feed_dict={K.learning_phase(): 0})
 
-            if iteration % 500 == 0:
+            if iteration % 1000 == 0:
                 log.debug("Iteration {}".format(iteration))
                 log.debug("Time in Iteration {}".format(time.time() - start_time))
                 log.debug("Norm {}".format(norm))
-                log.debug("Loss List {}\n".format(loss_list))
+                log.debug("Loss List {}".format(loss_list))
                 log.debug("Loss {}".format(loss))
 
             scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
@@ -212,7 +212,7 @@ class GradientDescentDL:
                     best_attack[e] = ii
 
         # return the best solution found
-        t_img = self.sess.run([self.timg], feed_dict={K.learning_phase(): 0})
+        t_img = self.sess.run([self.timg], feed_dict={K.learning_phase(): 0})[0]
         return np.array(best_attack) - t_img
 
 
@@ -222,7 +222,7 @@ def gradientDescentFunc(distribution, models, x, y, alpha, attack=None, target=N
         y = np.expand_dims(target, axis=0)
     else:
         y = np.expand_dims(y, axis=0)
-    return attack.attack(x, y, distribution)
+    return attack.attack(x, y, distribution)[0]
 
 
 
