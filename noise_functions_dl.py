@@ -197,7 +197,7 @@ class GradientDescentDL:
             norm, loss_list, scores, nimg, loss = self.sess.run([self.norm, self.loss1list, self.outputs, self.newimg,
                                                                  self.loss], feed_dict={K.learning_phase(): 0})
 
-            if iteration % 1000 == 0:
+            if iteration == self.MAX_ITERATIONS - 1:
                 log.debug("Iteration {}".format(iteration))
                 log.debug("Time in Iteration {}".format(time.time() - start_time))
                 log.debug("Norm {}".format(norm))

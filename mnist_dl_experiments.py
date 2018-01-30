@@ -12,7 +12,7 @@ from noise_functions_dl import GradientDescentDL, gradientDescentFunc
 
 
 def main(arguments):
-    parser = argparse.ArgumentParser(description="deep leanrning classification experiments argument parser")
+    parser = argparse.ArgumentParser(description="deep learning classification experiments argument parser")
     parser.add_argument("-noise_type", help="targeted or untargeted noise", choices=["targeted", "untargeted"],
                         default="untargeted", type=str)
     parser.add_argument("-mwu_iters", help="number of iterations for the MWU", type=int, required=True)
@@ -23,8 +23,8 @@ def main(arguments):
     args = parser.parse_args(arguments)
 
     date = datetime.datetime.now()
-    exp_name = "deepLearning-{}-{}-{}-{}-{}{}".format(args.data_path, args.noise_type, date.month, date.day,
-                                                      date.hour, date.minute)
+    exp_name = "deepLearning-{}-{}-{}-{}-{}-{}{}".format(args.data_path, args.noise_type, args.alpha, date.month,
+                                                         date.day, date.hour, date.minute)
     log_file = exp_name + ".log"
 
     if not os.path.exists(exp_name):
