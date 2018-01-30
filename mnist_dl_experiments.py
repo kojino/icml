@@ -4,10 +4,11 @@ from mwu import runMWU
 import sys
 import datetime
 from setup_mnist import *
+from functools import partial
 import numpy as np
 import tensorflow as tf
 import os
-from noise_functions_dl import GradientDescentDL
+from noise_functions_dl import GradientDescentDL, gradientDescentFunc
 
 
 def main(arguments):
@@ -22,7 +23,8 @@ def main(arguments):
     args = parser.parse_args(arguments)
 
     date = datetime.datetime.now()
-    exp_name = "deepLearning-{}-{}-{}-{}{}".format(args.noise_type, date.month, date.day, date.hour, date.minute)
+    exp_name = "deepLearning-{}-{}-{}-{}-{}{}".format(args.data_path, args.noise_type, date.month, date.day,
+                                                      date.hour, date.minute)
     log_file = exp_name + ".log"
 
     if not os.path.exists(exp_name):
@@ -42,8 +44,6 @@ def main(arguments):
     log.debug("Optimization Iters {}".format(args.opt_iters))
     log.debug("Data path : {}".format(args.data_path))
 
-    # base_xception = Xception(input_tensor=input_tensor, weights="imagenet", include_top=True)
-    # xception = Model(input=input_tensor, output=base_xception(tf_inputs))
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
 
         log.debug("\nbeginning to load models...")
@@ -55,33 +55,35 @@ def main(arguments):
 
         for model in models:
             model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+
         log.debug("finished loading models!\n")
 
         X_exp = np.load(args.data_path + "/" + "X_exp.npy")
-        if args.noise_type == "targeted":
-            Y_exp = np.load(args.data_path + "/" + "Target_exp.npy")
-        else:
-            Y_exp = np.load(args.data_path + "/" + "Y_exp.npy")
+        Y_exp = np.load(args.data_path + "/" + "Y_exp.npy")
+        Target_exp = np.load(args.data_path + "/" + "Target_exp.npy")
 
         X_exp = X_exp.reshape(-1, 28, 28, 1)
         Y_exp = np.array([(np.arange(10) == l).astype(np.float32) for l in Y_exp])
+        Target_exp = np.array([(np.arange(10) == l).astype(np.float32) for l in Target_exp])
 
         log.debug("Num Points {}\n".format(X_exp.shape[0]))
+        target_bool = args.noise_type == "targeted"
+        # initialize the attack object
+        attack_obj = GradientDescentDL(sess, models, args.alpha, (28, 1, 10), -.5, .5, # TODO: add these paramaters as variables
+                                       targeted=target_bool, batch_size=1, max_iterations=args.opt_iters,
+                                       learning_rate=args.learning_rate, confidence=0)
 
-        targeted = args.noise_type == "targeted"
-        noise_func = GradientDescentDL(sess, models, args.alpha, (28, 1, 10), -.5, .5, targeted=targeted, batch_size=1,
-                                       max_iterations=args.opt_iters, learning_rate=args.learning_rate, confidence=0)
         log.debug("starting attack!")
-        noise_func.attack(X_exp, Y_exp, np.ones(len(models)))
+        noise_func = partial(gradientDescentFunc, attack=attack_obj)
+        targeted = Target_exp if target_bool else False
+        weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
+                                                                        noise_func, exp_name, targeted=targeted)
 
-        # weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
-        #                                                                 noise_func, exp_name,)
-
-        # np.save(exp_name + "/" + "weights.npy", weights)
-        # np.save(exp_name + "/" + "noise.npy", noise)
-        # np.save(exp_name + "/" + "loss_history.npy", loss_history)
-        # np.save(exp_name + "/" + "acc_history.npy", acc_history)
-        # np.save(exp_name + "/" + "action_loss.npy", action_loss)
+        np.save(exp_name + "/" + "weights.npy", weights)
+        np.save(exp_name + "/" + "noise.npy", noise)
+        np.save(exp_name + "/" + "loss_history.npy", loss_history)
+        np.save(exp_name + "/" + "acc_history.npy", acc_history)
+        np.save(exp_name + "/" + "action_loss.npy", action_loss)
 
         log.debug("Success")
 

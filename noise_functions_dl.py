@@ -19,6 +19,7 @@ LEARNING_RATE = 1e-2     # larger values converge faster to less accurate result
 TARGETED = False         # should we target one specific class? or just be wrong?
 CONFIDENCE = 0          # how strong the adversarial example should be
 
+
 class GradientDescentDL:
     def __init__(self, sess, models, alpha, dataset_params, min_val, max_val, batch_size=1,
                  confidence=CONFIDENCE, targeted=TARGETED, learning_rate=LEARNING_RATE,
@@ -194,8 +195,7 @@ class GradientDescentDL:
             self.sess.run([self.train], feed_dict={K.learning_phase(): 0})
 
             norm, loss_list, scores, nimg, loss = self.sess.run([self.norm, self.loss1list, self.outputs, self.newimg,
-                                                                 self.loss],
-                                                     feed_dict={K.learning_phase(): 0})
+                                                                 self.loss], feed_dict={K.learning_phase(): 0})
 
             if iteration % 500 == 0:
                 log.debug("Iteration {}".format(iteration))
@@ -207,12 +207,22 @@ class GradientDescentDL:
             scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 
             for e, (sc, ii) in enumerate(zip(scores, nimg)):
-                # currLoss = compareLoss(sc, np.argmax(batchlab[e]))  # expected loss of the learner
                 if loss < best_score[e]:  # we've found a clear improvement for this value of c
-                    best_score[e] = currLoss
+                    best_score[e] = loss
                     best_attack[e] = ii
 
-            #TODO: need to update this so it just returns the noise solution, also it needs to work for the best loss
-
         # return the best solution found
-        return best_attack
+        t_img = self.sess.run([self.timg], feed_dict={K.learning_phase(): 0})
+        return np.array(best_attack) - t_img
+
+
+def gradientDescentFunc(distribution, models, x, y, alpha, attack=None, target=None):
+    x = np.expand_dims(x, axis=0)
+    if target is not None:
+        y = np.expand_dims(target, axis=0)
+    else:
+        y = np.expand_dims(y, axis=0)
+    return attack.attack(x, y, distribution)
+
+
+
