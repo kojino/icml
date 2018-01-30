@@ -3,15 +3,7 @@ import argparse
 from mwu import runMWU
 import sys
 import datetime
-from keras.applications.resnet50 import ResNet50
-# from keras.applications.xception import Xception
-from keras.applications.inception_resnet_v2 import InceptionResNetV2
-from keras.applications.vgg19 import VGG19
-from keras.applications.inception_v3 import InceptionV3
-from keras.layers.core import Lambda
-from keras.layers import Input
-from keras.applications.imagenet_utils import preprocess_input
-from keras.models import Model
+from setup_mnist import *
 import numpy as np
 import tensorflow as tf
 import os
@@ -56,23 +48,10 @@ def main(arguments):
 
         log.debug("\nbeginning to load models...")
 
-        input_tensor = Input(shape=(224, 224, 3))
-        tf_inputs = Lambda(lambda x: preprocess_input(x, mode='tf'))(input_tensor)
-        caffe_inputs = Lambda(lambda x: preprocess_input(x, mode='caffe'))(input_tensor)
-
-        base_inception = InceptionV3(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        inception = Model(input=input_tensor, output=base_inception(tf_inputs))
-
-        base_resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        resnet = Model(input=input_tensor, output=base_resnet(caffe_inputs))
-
-        base_inceptionresnet = InceptionResNetV2(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        inceptionresnet = Model(input=input_tensor, output=base_inceptionresnet(tf_inputs))
-
-        base_vgg = VGG19(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        vgg = Model(input=input_tensor, output=base_vgg(caffe_inputs))
-
-        models = [inception, resnet, inceptionresnet, vgg]
+        model_dir = "deep_networks"
+        models = [conv_net(1, model_dir + "/conv1"), conv_net(0, model_dir + "/conv2"),
+                  multilayer(4, 128, model_dir + "/mlp1"), multilayer(2, 256, model_dir + "/mlp2"),
+                  multilayer(0, 0, model_dir + "/zero_layer")]
 
         for model in models:
             model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -80,14 +59,17 @@ def main(arguments):
 
         X_exp = np.load(args.data_path + "/" + "X_exp.npy")
         if args.noise_type == "targeted":
-            Y_exp = np.load(args.data_path + "/" + "Y_target_exp.npy")
+            Y_exp = np.load(args.data_path + "/" + "Target_exp.npy")
         else:
-            Y_exp = np.load(args.data_path + "/" + "Y_true_exp.npy")
+            Y_exp = np.load(args.data_path + "/" + "Y_exp.npy")
+
+        X_exp = X_exp.reshape(-1, 28, 28, 1)
+        Y_exp = np.array([(np.arange(10) == l).astype(np.float32) for l in Y_exp])
 
         log.debug("Num Points {}\n".format(X_exp.shape[0]))
 
         targeted = args.noise_type == "targeted"
-        noise_func = GradientDescentDL(sess, models, args.alpha, targeted=targeted, batch_size=1,
+        noise_func = GradientDescentDL(sess, models, args.alpha, (28, 1, 10), -.5, .5, targeted=targeted, batch_size=1,
                                        max_iterations=args.opt_iters, learning_rate=args.learning_rate, confidence=0)
         log.debug("starting attack!")
         noise_func.attack(X_exp, Y_exp, np.ones(len(models)))

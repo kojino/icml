@@ -12,6 +12,7 @@ from tensorflow.contrib.opt import VariableClippingOptimizer
 import numpy as np
 import logging as log
 import time
+import sys
 
 MAX_ITERATIONS = 1000   # number of iterations to perform gradient descent
 LEARNING_RATE = 1e-2     # larger values converge faster to less accurate results, default 1e-2
@@ -19,8 +20,9 @@ TARGETED = False         # should we target one specific class? or just be wrong
 CONFIDENCE = 0          # how strong the adversarial example should be
 
 class GradientDescentDL:
-    def __init__(self, sess, models, alpha, batch_size=1, confidence=CONFIDENCE, targeted=TARGETED,
-                 learning_rate=LEARNING_RATE, max_iterations=MAX_ITERATIONS, min_val=0.0, max_val=255.0):
+    def __init__(self, sess, models, alpha, dataset_params, min_val, max_val, batch_size=1,
+                 confidence=CONFIDENCE, targeted=TARGETED, learning_rate=LEARNING_RATE,
+                 max_iterations=MAX_ITERATIONS):
         """
         The L_2 optimized attack. 
 
@@ -46,8 +48,8 @@ class GradientDescentDL:
         boxmin: Minimum pixel value (default -0.5).
         boxmax: Maximum pixel value (default 0.5).
         """
-
-        image_size, num_channels, num_labels = 224, 3, 1000  # imagenet parameters
+        log.debug("Number of models {} ".format(len(models)))
+        image_size, num_channels, num_labels = dataset_params  # imagenet parameters 224, 3, 1000 (0, 255)
         self.sess = sess
         self.alpha = alpha
         self.TARGETED = targeted
@@ -114,9 +116,9 @@ class GradientDescentDL:
 
         # Setup the adam optimizer and keep track of variables we're creating
         start_vars = set(x.name for x in tf.global_variables())
-        # adam = tf.train.AdamOptimizer(self.LEARNING_RATE)
-        sgd = tf.train.GradientDescentOptimizer(self.LEARNING_RATE)
-        optimizer = VariableClippingOptimizer(sgd, {self.modifier: [1, 2, 3]}, self.alpha)
+        adam = tf.train.AdamOptimizer(self.LEARNING_RATE)
+        # sgd = tf.train.GradientDescentOptimizer(self.LEARNING_RATE)
+        optimizer = VariableClippingOptimizer(adam, {self.modifier: [1, 2, 3]}, self.alpha)
         self.train = optimizer.minimize(self.loss, var_list=[self.modifier])
 
         end_vars = tf.global_variables()
@@ -148,36 +150,36 @@ class GradientDescentDL:
         """
         Run the attack on a batch of images and labels.
         """
-        def compareLoss(x, y):
-            """
-            x is an np array of shape num_models x num_classes
-            y is the true label or target label of the class
-
-            returns a number in [0,1] indicating the expected loss of the learner
-            """
-            if not isinstance(x, (float, int, np.int64)):
-                x = np.copy(x)
-                for v in x:  # update the target scores for each individual prediction
-                    if self.TARGETED:
-                        v[y] -= self.CONFIDENCE
-                    else:
-                        v[y] += self.CONFIDENCE
-                x = np.argmax(x, 1)  # these are the predictions of each hypothesis
-
-            if self.TARGETED:
-                return np.dot(x == y, weights)
-            else:
-                return np.dot(x != y, weights)
+        # def compareLoss(x, y):
+        #     """
+        #     x is an np array of shape num_models x num_classes
+        #     y is the true label or target label of the class
+        #
+        #     returns a number in [0,1] indicating the expected loss of the learner
+        #     """
+        #     if not isinstance(x, (float, int, np.int64)):
+        #         x = np.copy(x)
+        #         for v in x:  # update the target scores for each individual prediction
+        #             if self.TARGETED:
+        #                 v[y] -= self.CONFIDENCE
+        #             else:
+        #                 v[y] += self.CONFIDENCE
+        #         x = np.argmax(x, 1)  # these are the predictions of each hypothesis
+        #
+        #     if self.TARGETED:
+        #         return np.dot(x == y, weights)
+        #     else:
+        #         return np.dot(x != y, weights)
 
         batch_size = self.batch_size
-        bestattack = [np.zeros(imgs[0].shape)] * batch_size
+        best_attack = [np.zeros(imgs[0].shape)] * batch_size
 
         # completely reset adam's internal state.
         self.sess.run(self.init)
         batch = imgs[:batch_size]
         batchlab = labs[:batch_size]
 
-        bestscore = [0.0] * batch_size
+        best_score = [sys.maxint] * batch_size
 
         # set the variables so that we don't have to send them over again
         self.sess.run(self.setup, {self.assign_timg: batch,
@@ -189,24 +191,28 @@ class GradientDescentDL:
         for iteration in xrange(self.MAX_ITERATIONS):
             start_time = time.time()
             # perform the attack
-            # self.sess.run([self.train], feed_dict={K.learning_phase(): 0})
+            self.sess.run([self.train], feed_dict={K.learning_phase(): 0})
 
-            _, norm, loss, scores, nimg = self.sess.run([self.train, self.norm, self.loss1list, self.outputs, self.newimg],
-                                                        feed_dict={K.learning_phase(): 0})
+            norm, loss_list, scores, nimg, loss = self.sess.run([self.norm, self.loss1list, self.outputs, self.newimg,
+                                                                 self.loss],
+                                                     feed_dict={K.learning_phase(): 0})
 
-            if iteration % 100 == 0:
+            if iteration % 500 == 0:
                 log.debug("Iteration {}".format(iteration))
                 log.debug("Time in Iteration {}".format(time.time() - start_time))
-                log.debug("NORM {}".format(norm))
-                log.debug("LOSS {}\n".format(loss))
+                log.debug("Norm {}".format(norm))
+                log.debug("Loss List {}\n".format(loss_list))
+                log.debug("Loss {}".format(loss))
 
             scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 
             for e, (sc, ii) in enumerate(zip(scores, nimg)):
-                currLoss = compareLoss(sc, np.argmax(batchlab[e]))  # expected loss of the learner
-                if currLoss > bestscore[e]:  # we've found a clear improvement for this value of c
-                    bestscore[e] = currLoss
-                    bestattack[e] = ii
+                # currLoss = compareLoss(sc, np.argmax(batchlab[e]))  # expected loss of the learner
+                if loss < best_score[e]:  # we've found a clear improvement for this value of c
+                    best_score[e] = currLoss
+                    best_attack[e] = ii
+
+            #TODO: need to update this so it just returns the noise solution, also it needs to work for the best loss
 
         # return the best solution found
-        return bestattack
+        return best_attack
