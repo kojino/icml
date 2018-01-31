@@ -3,18 +3,7 @@ import matplotlib.pyplot as plt
 from noise_functions_binary import tryRegionBinary
 from noise_functions_multiclass import distributionalOracleOneVsAll
 import sys
-from keras.models import Model
-from keras.layers import Average
 
-def ensembleModels(models, model_input):
-    # taken from https://medium.com/@twt446/ensemble-and-store-models-in-keras-2-x-b881a6d7693f
-    # collect outputs of models in a list
-    yModels=[model(model_input) for model in models]
-    # averaging outputs
-    yAvg=Average()(yModels)
-    # build model from same input and avg output
-    modelEns = Model(inputs=model_input, outputs=yAvg, name='ensemble')
-    return modelEns
 
 def getMax(lst, target):
     """

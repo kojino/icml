@@ -5,10 +5,8 @@ from keras.applications.inception_v3 import InceptionV3
 from keras.layers.core import Lambda
 from keras.layers import Input
 from keras.applications.imagenet_utils import preprocess_input
-from keras.models import Model
 import os
 import logging as log
-from helper import ensembleModels
 import numpy as np
 from noise_functions_dl import GradientDescentDL, gradientDescentFunc
 from functools import partial
@@ -16,6 +14,19 @@ from mwu import adversary
 import tensorflow as tf
 import argparse
 import sys
+from keras.models import Model
+from keras.layers import Average
+
+
+def ensembleModels(models, model_input):
+    # taken from https://medium.com/@twt446/ensemble-and-store-models-in-keras-2-x-b881a6d7693f
+    # collect outputs of models in a list
+    yModels=[model(model_input) for model in models]
+    # averaging outputs
+    yAvg=Average()(yModels)
+    # build model from same input and avg output
+    modelEns = Model(inputs=model_input, outputs=yAvg, name='ensemble')
+    return modelEns
 
 
 def main(arguments):
@@ -30,7 +41,7 @@ def main(arguments):
 
     alpha = 4.0
     lr = .001
-    opt_iters = 3 # TODO
+    opt_iters = 3000 # TODO
 
     if not os.path.exists(exp_name):
         os.mkdir(exp_name)
@@ -74,9 +85,9 @@ def main(arguments):
 
         data_dims = (224, 3, 1000)
         box_vals = (0.0, 255.0)
-        X_exp = X_exp[:3]
-        Y_exp = Y_exp[:3] # TODO
-        Target_exp = Target_exp[:3]
+        X_exp = X_exp[:50]
+        Y_exp = Y_exp[:50]
+        Target_exp = Target_exp[:50]
 
         log.debug("Ensemble Accuracy {}".format(ensemble.evaluate(X_exp, Y_exp)))
 
