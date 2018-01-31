@@ -21,7 +21,7 @@ CONFIDENCE = 0          # how strong the adversarial example should be
 
 
 class GradientDescentDL:
-    def __init__(self, sess, models, alpha, dataset_params, min_val, max_val, batch_size=1,
+    def __init__(self, sess, models, alpha, dataset_params, box_vals, batch_size=1,
                  confidence=CONFIDENCE, targeted=TARGETED, learning_rate=LEARNING_RATE,
                  max_iterations=MAX_ITERATIONS):
         """
@@ -49,7 +49,7 @@ class GradientDescentDL:
         boxmin: Minimum pixel value (default -0.5).
         boxmax: Maximum pixel value (default 0.5).
         """
-        print("Number of models {} ".format(len(models)))
+        log.debug("Number of models {} ".format(len(models)))
         image_size, num_channels, num_labels = dataset_params  # imagenet parameters 224, 3, 1000 (0, 255)
         self.sess = sess
         self.alpha = alpha
@@ -60,8 +60,7 @@ class GradientDescentDL:
         self.batch_size = batch_size
         self.num_models = len(models)
         self.num_labels = num_labels
-        self.min_val = min_val
-        self.max_val = max_val
+        self.box_min, self.box_max = box_vals
 
         shape = (batch_size, image_size, image_size, num_channels)
         
@@ -79,7 +78,7 @@ class GradientDescentDL:
         self.assign_weights = tf.placeholder(tf.float32, [self.num_models])
 
         # the resulting image, tanh'd to keep bounded from boxmin to boxmax
-        self.newimg = tf.clip_by_value(self.modifier + self.timg, self.min_val, self.max_val)
+        self.newimg = tf.clip_by_value(self.modifier + self.timg, self.box_min, self.box_max)
 
         self.outputs = [model(self.newimg) for model in models]
         
@@ -141,9 +140,9 @@ class GradientDescentDL:
         If self.targeted is false, then targets are the original class labels.
         """
         r = []
-        # print('go up to',len(imgs))
+        # log.debug('go up to',len(imgs))
         for i in range(0, len(imgs), self.batch_size):
-            # print('tick',i)
+            # log.debug('tick',i)
             r.extend(self.attack_batch(imgs[i:i+self.batch_size], targets[i:i+self.batch_size], weights))
         return np.array(r)
 
@@ -198,11 +197,11 @@ class GradientDescentDL:
                                                                  self.loss], feed_dict={K.learning_phase(): 0})
 
             if iteration == self.MAX_ITERATIONS - 1:
-                print("Iteration {}".format(iteration))
-                print("Time in Iteration {}".format(time.time() - start_time))
-                print("Norm {}".format(norm))
-                print("Loss List {}".format(loss_list))
-                print("Loss {}".format(loss))
+                log.debug("Iteration {}".format(iteration))
+                log.debug("Time in Iteration {}".format(time.time() - start_time))
+                log.debug("Norm {}".format(norm))
+                log.debug("Loss List {}".format(loss_list))
+                log.debug("Loss {}".format(loss))
 
             scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 

@@ -32,6 +32,6 @@ for model in models:
 
 
 X_exp = np.load("imagenet_data/X_exp.npy")
-Y_exp = np.load("imagenet_data/Y_true_exp.npy")
+Y_exp = np.load("imagenet_data/Y_exp.npy")
 for i in xrange(len(models)):
     print models[i].evaluate(X_exp, Y_exp)

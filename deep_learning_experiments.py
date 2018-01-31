@@ -3,8 +3,12 @@ import argparse
 from mwu import runMWU
 import sys
 import datetime
+from setup_mnist import *
+from functools import partial
+import numpy as np
+import tensorflow as tf
+import os
 from keras.applications.resnet50 import ResNet50
-# from keras.applications.xception import Xception
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras.applications.vgg19 import VGG19
 from keras.applications.inception_v3 import InceptionV3
@@ -12,25 +16,25 @@ from keras.layers.core import Lambda
 from keras.layers import Input
 from keras.applications.imagenet_utils import preprocess_input
 from keras.models import Model
-import numpy as np
-import tensorflow as tf
-import os
-from noise_functions_dl import GradientDescentDL
+from noise_functions_dl import GradientDescentDL, gradientDescentFunc
 
 
 def main(arguments):
-    parser = argparse.ArgumentParser(description="deep leanrning classification experiments argument parser")
+    parser = argparse.ArgumentParser(description="deep learning classification experiments argument parser")
+    parser.add_argument("-data_set", help="directory with experiment data + models", choices=["mnist", "imagenet"],
+                        required=True)
     parser.add_argument("-noise_type", help="targeted or untargeted noise", choices=["targeted", "untargeted"],
                         default="untargeted", type=str)
     parser.add_argument("-mwu_iters", help="number of iterations for the MWU", type=int, required=True)
     parser.add_argument("-alpha", help="noise budget", type=float, required=True)
-    parser.add_argument("-data_path", help="directory with experiment data + models", type=str, required=True)
     parser.add_argument("-opt_iters", help="number of iterations to run optimizer", type=int, required=True)
     parser.add_argument("-learning_rate", help="learning rate for the optimizer", type=float, required=True)
     args = parser.parse_args(arguments)
-
+    
     date = datetime.datetime.now()
-    exp_name = "deepLearning-{}-{}-{}-{}{}".format(args.noise_type, date.month, date.day, date.hour, date.minute)
+    data_path = "multiclass_data_2" if args.data_set == "mnist" else "imagenet_data"
+    exp_name = "deepLearning-{}-{}-{}-{}-{}-{}{}".format(args.data_set, args.noise_type, args.alpha, date.month,
+                                                         date.day, date.hour, date.minute)
     log_file = exp_name + ".log"
 
     if not os.path.exists(exp_name):
@@ -48,58 +52,83 @@ def main(arguments):
     log.debug("Alpha {}".format(args.alpha))
     log.debug("Learning Rate {}".format(args.learning_rate))
     log.debug("Optimization Iters {}".format(args.opt_iters))
-    log.debug("Data path : {}".format(args.data_path))
+    log.debug("Data path : {}".format(data_path))
 
-    # base_xception = Xception(input_tensor=input_tensor, weights="imagenet", include_top=True)
-    # xception = Model(input=input_tensor, output=base_xception(tf_inputs))
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
 
         log.debug("\nbeginning to load models...")
 
-        input_tensor = Input(shape=(224, 224, 3))
-        tf_inputs = Lambda(lambda x: preprocess_input(x, mode='tf'))(input_tensor)
-        caffe_inputs = Lambda(lambda x: preprocess_input(x, mode='caffe'))(input_tensor)
+        if args.data_set == "mnist":
+            model_dir = "deep_networks"
+            models = [conv_net(1, model_dir + "/conv1"), conv_net(0, model_dir + "/conv2"),
+                      multilayer(4, 128, model_dir + "/mlp1"), multilayer(2, 256, model_dir + "/mlp2"),
+                      multilayer(0, 0, model_dir + "/zero_layer")]
 
-        base_inception = InceptionV3(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        inception = Model(input=input_tensor, output=base_inception(tf_inputs))
+            for model in models:
+                model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+        else:
+            input_tensor = Input(shape=(224, 224, 3))
+            tf_inputs = Lambda(lambda x: preprocess_input(x, mode='tf'))(input_tensor)
+            caffe_inputs = Lambda(lambda x: preprocess_input(x, mode='caffe'))(input_tensor)
 
-        base_resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        resnet = Model(input=input_tensor, output=base_resnet(caffe_inputs))
+            base_inception = InceptionV3(input_tensor=input_tensor, weights="imagenet", include_top=True)
+            inception = Model(inputs=input_tensor, outputs=base_inception(tf_inputs))
 
-        base_inceptionresnet = InceptionResNetV2(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        inceptionresnet = Model(input=input_tensor, output=base_inceptionresnet(tf_inputs))
+            base_resnet = ResNet50(input_tensor=input_tensor, weights="imagenet", include_top=True)
+            resnet = Model(inputs=input_tensor, outputs=base_resnet(caffe_inputs))
 
-        base_vgg = VGG19(input_tensor=input_tensor, weights="imagenet", include_top=True)
-        vgg = Model(input=input_tensor, output=base_vgg(caffe_inputs))
+            base_inceptionresnet = InceptionResNetV2(input_tensor=input_tensor, weights="imagenet", include_top=True)
+            inceptionresnet = Model(inputs=input_tensor, outputs=base_inceptionresnet(tf_inputs))
 
-        models = [inception, resnet, inceptionresnet, vgg]
+            base_vgg = VGG19(input_tensor=input_tensor, weights="imagenet", include_top=True)
+            vgg = Model(inputs=input_tensor, outputs=base_vgg(caffe_inputs))
 
-        for model in models:
-            model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+            models = [vgg, inceptionresnet, resnet, inception]
+
+            for model in models:
+                model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
         log.debug("finished loading models!\n")
 
-        X_exp = np.load(args.data_path + "/" + "X_exp.npy")
-        if args.noise_type == "targeted":
-            Y_exp = np.load(args.data_path + "/" + "Y_target_exp.npy")
+        X_exp = np.load(data_path + "/" + "X_exp.npy")
+        Y_exp = np.load(data_path + "/" + "Y_exp.npy")
+        Target_exp = np.load(data_path + "/" + "Target_exp.npy")
+
+        if args.data_set == "mnist":
+            X_exp = X_exp.reshape(-1, 28, 28, 1)
+            Y_exp = np.array([(np.arange(10) == l).astype(np.float32) for l in Y_exp])
+            Target_exp = np.array([(np.arange(10) == l).astype(np.float32) for l in Target_exp])
+            data_dims = (28, 1, 10)
+            box_vals = (-.5, .5)
         else:
-            Y_exp = np.load(args.data_path + "/" + "Y_true_exp.npy")
+            data_dims = (224, 3, 1000)
+            box_vals = (0.0, 255.0)
 
-        log.debug("Num Points {}\n".format(X_exp.shape[0]))
 
-        targeted = args.noise_type == "targeted"
-        noise_func = GradientDescentDL(sess, models, args.alpha, targeted=targeted, batch_size=1,
-                                       max_iterations=args.opt_iters, learning_rate=args.learning_rate, confidence=0)
+        log.debug("Num Points {}".format(X_exp.shape[0]))
+        target_bool = args.noise_type == "targeted"
+
+        X_exp = X_exp[:3]  # TODO: remove
+        Y_exp = Y_exp[:3]
+        Target_exp = Target_exp[:3]
+
+        # initialize the attack object_
+        attack_obj = GradientDescentDL(sess, models, args.alpha, data_dims, box_vals, targeted=target_bool,
+                                       batch_size=1, max_iterations=args.opt_iters, learning_rate=args.learning_rate,
+                                       confidence=0)
+
         log.debug("starting attack!")
-        noise_func.attack(X_exp, Y_exp, np.ones(len(models)))
+        noise_func = partial(gradientDescentFunc, attack=attack_obj)
+        targeted = Target_exp if target_bool else False
+        weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.mwu_iters, X_exp, Y_exp, args.alpha,
+                                                                        noise_func, exp_name, targeted=targeted,
+                                                                        dl=True)
 
-        # weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
-        #                                                                 noise_func, exp_name,)
-
-        # np.save(exp_name + "/" + "weights.npy", weights)
-        # np.save(exp_name + "/" + "noise.npy", noise)
-        # np.save(exp_name + "/" + "loss_history.npy", loss_history)
-        # np.save(exp_name + "/" + "acc_history.npy", acc_history)
-        # np.save(exp_name + "/" + "action_loss.npy", action_loss)
+        np.save(exp_name + "/" + "weights.npy", weights)
+        np.save(exp_name + "/" + "noise.npy", noise)
+        np.save(exp_name + "/" + "loss_history.npy", loss_history)
+        np.save(exp_name + "/" + "acc_history.npy", acc_history)
+        np.save(exp_name + "/" + "action_loss.npy", action_loss)
 
         log.debug("Success")
 

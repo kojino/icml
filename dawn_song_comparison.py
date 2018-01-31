@@ -68,8 +68,8 @@ def main(arguments):
             model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
         X_exp = np.load(args.data_path + "/" + "X_exp.npy")[:3]
-        Y_true_exp = np.load(args.data_path + "/" + "Y_true_exp.npy")[:3]
-        Y_target_exp = np.load(args.data_path + "/" + "Y_target_exp.npy")
+        Y_true_exp = np.load(args.data_path + "/" + "Y_exp.npy")[:3]
+        Y_target_exp = np.load(args.data_path + "/" + "Target_exp.npy")
 
         log.debug("True Labels {}".format(np.argmax(Y_true_exp, axis=1)))
 
