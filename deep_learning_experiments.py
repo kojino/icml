@@ -100,9 +100,12 @@ def main(arguments):
             Target_exp = np.array([(np.arange(10) == l).astype(np.float32) for l in Target_exp])
             data_dims = (28, 1, 10)
             box_vals = (-.5, .5)
-        else:
+        else:  # "imagenet"
             data_dims = (224, 3, 1000)
             box_vals = (0.0, 255.0)
+            X_exp = X_exp[:50]
+            Y_exp = Y_exp[:50]
+            Target_exp = Target_exp[:50]
 
 
         log.debug("Num Points {}".format(X_exp.shape[0]))
