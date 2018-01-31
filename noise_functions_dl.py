@@ -49,7 +49,7 @@ class GradientDescentDL:
         boxmin: Minimum pixel value (default -0.5).
         boxmax: Maximum pixel value (default 0.5).
         """
-        log.debug("Number of models {} ".format(len(models)))
+        print("Number of models {} ".format(len(models)))
         image_size, num_channels, num_labels = dataset_params  # imagenet parameters 224, 3, 1000 (0, 255)
         self.sess = sess
         self.alpha = alpha
@@ -198,11 +198,11 @@ class GradientDescentDL:
                                                                  self.loss], feed_dict={K.learning_phase(): 0})
 
             if iteration == self.MAX_ITERATIONS - 1:
-                log.debug("Iteration {}".format(iteration))
-                log.debug("Time in Iteration {}".format(time.time() - start_time))
-                log.debug("Norm {}".format(norm))
-                log.debug("Loss List {}".format(loss_list))
-                log.debug("Loss {}".format(loss))
+                print("Iteration {}".format(iteration))
+                print("Time in Iteration {}".format(time.time() - start_time))
+                print("Norm {}".format(norm))
+                print("Loss List {}".format(loss_list))
+                print("Loss {}".format(loss))
 
             scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 
