@@ -60,12 +60,11 @@ def main(arguments):
 
         if args.data_set == "mnist":
             model_dir = "deep_networks"
-            models = [conv_net(1, model_dir + "/conv1"), conv_net(0, model_dir + "/conv2"),
-                      multilayer(4, 128, model_dir + "/mlp1"), multilayer(2, 256, model_dir + "/mlp2"),
-                      multilayer(0, 0, model_dir + "/zero_layer")]
-
+            models = [conv_net(False, 2, 200, model_dir + "/conv0"), conv_net(True, 2, 200, model_dir + "/conv1"),
+                      conv_net(True, 4, 64, model_dir + "/conv2"), multilayer(4, 128, model_dir + "/mlp0"),
+                      multilayer(2, 256, model_dir + "/mlp1")]
             for model in models:
-                model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+                model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
         else:
             input_tensor = Input(shape=(224, 224, 3))
             tf_inputs = Lambda(lambda x: preprocess_input(x, mode='tf'))(input_tensor)
@@ -106,7 +105,6 @@ def main(arguments):
             X_exp = X_exp[:50]
             Y_exp = Y_exp[:50]
             Target_exp = Target_exp[:50]
-
 
         log.debug("Num Points {}".format(X_exp.shape[0]))
         target_bool = args.noise_type == "targeted"

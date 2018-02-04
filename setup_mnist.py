@@ -13,7 +13,7 @@ from keras.layers import Dense, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, Dropout
 from keras.optimizers import SGD
 
-OPTIMIZER = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+# OPTIMIZER = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 
 
 def extract_data(filemodel_dir, num_images):
@@ -54,51 +54,53 @@ def train_network(model, X_train, Y_train, X_val, Y_val, batch_size, epochs, fil
     return model
 
 
-def conv_net(num_layers, restore=None):
-        model = Sequential()
+def conv_net(extra_conv, num_layers, nodes_per_layer, restore=None):
+    model = Sequential()
 
-        model.add(Conv2D(32, (3, 3), input_shape=(28, 28, 1)))
+    model.add(Conv2D(32, (3, 3), input_shape=(28, 28, 1)))
+    model.add(Activation('relu'))
+    model.add(Conv2D(32, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    if extra_conv:
+        model.add(Conv2D(64, (3, 3)))
         model.add(Activation('relu'))
-        model.add(Conv2D(32, (3, 3)))
+        model.add(Conv2D(64, (3, 3)))
         model.add(Activation('relu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        for _ in range(num_layers):
-            model.add(Conv2D(64, (3, 3)))
-            model.add(Activation('relu'))
-            model.add(Conv2D(64, (3, 3)))
-            model.add(Activation('relu'))
-            model.add(MaxPooling2D(pool_size=(2, 2)))
-
-        model.add(Flatten())
-        model.add(Dense(200))
+    model.add(Flatten())
+    for _ in xrange(num_layers):
+        model.add(Dense(nodes_per_layer))
         model.add(Activation('relu'))
-        model.add(Dense(200))
+        model.add(Dense(nodes_per_layer))
         model.add(Activation('relu'))
-        model.add(Dense(10))
-        model.add(Activation('softmax'))
+    model.add(Dense(10))
+    model.add(Activation('softmax'))
 
-        if restore:
-            model.load_weights(restore)
-        model.compile(optimizer=OPTIMIZER, loss='categorical_crossentropy', metrics=['accuracy'])
+    if restore:
+        model.load_weights(restore)
+    model.compile(optimizer="adam", loss='categorical_crossentropy', metrics=['accuracy'])
 
-        return model
+    return model
+
 
 def multilayer(num_layers, nodes_per_layer, restore=None):
-        model = Sequential()
-        model.add(Flatten(input_shape=(28, 28, 1)))
-        for p in [nodes_per_layer] * num_layers:
-            model.add(Dense(p))
-            model.add(Activation('relu'))
-            model.add(Dropout(.1))
-        model.add(Dense(10))
-        model.add(Activation('softmax'))
+    model = Sequential()
+    model.add(Flatten(input_shape=(28, 28, 1)))
+    for p in [nodes_per_layer] * num_layers:
+        model.add(Dense(p))
+        model.add(Activation('relu'))
+        model.add(Dropout(.2))
+    model.add(Dense(10))
+    model.add(Activation('softmax'))
 
-        if restore:
-            model.load_weights(restore)
+    if restore:
+        model.load_weights(restore)
 
-        model.compile(optimizer=OPTIMIZER, loss='categorical_crossentropy', metrics=['accuracy'])
-        return model
+    model.compile(optimizer="adam", loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
 
 
 if __name__ == "__main__":
@@ -107,23 +109,23 @@ if __name__ == "__main__":
     if not os.path.isdir(model_dir):
         os.makedirs(model_dir)
 
-    conv1 = conv_net(1)
+    conv0 = conv_net(False, 2, 200)
+    train_network(conv0, data.train_data, data.train_labels, data.validation_data, data.validation_labels, 32, 10,
+                  model_dir + "/conv0")
+
+    conv1 = conv_net(True, 2, 200)
     train_network(conv1, data.train_data, data.train_labels, data.validation_data, data.validation_labels, 32, 10,
                   model_dir + "/conv1")
-    # print conv_net(1, model_dir + "/conv1").evaluate(data.test_data, data.test_labels)
 
-    conv2 = conv_net(0)
+    conv2 = conv_net(True, 4, 64)
     train_network(conv2, data.train_data, data.train_labels, data.validation_data, data.validation_labels, 32, 10,
                   model_dir + "/conv2")
 
-    mlp1 = multilayer(4, 128)
+    mlp0 = multilayer(4, 128)
+    train_network(mlp0, data.train_data, data.train_labels, data.validation_data, data.validation_labels, 32, 10,
+                  model_dir + "/mlp0")
+
+    mlp1 = multilayer(2, 256)
     train_network(mlp1, data.train_data, data.train_labels, data.validation_data, data.validation_labels, 32, 10,
                   model_dir + "/mlp1")
 
-    mlp2 = multilayer(2, 256)
-    train_network(mlp2, data.train_data, data.train_labels, data.validation_data, data.validation_labels, 32, 10,
-                  model_dir + "/mlp2")
-
-    zero_layer = multilayer(0, 0)
-    train_network(zero_layer, data.train_data, data.train_labels, data.validation_data, data.validation_labels, 32, 10,
-                  model_dir + "/zero_layer")

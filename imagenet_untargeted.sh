@@ -9,7 +9,7 @@
 #SBATCH --mail-user=jperdomo@college.harvard.edu
 
 NOISE_TYPE="untargeted"
-ALPHA=4.0
+ALPHA=7760
 DATA_SET="imagenet"
 MWU_ITERS=4
 OPT_ITERS=3000

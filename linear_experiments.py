@@ -26,7 +26,8 @@ def main(arguments):
     args = parser.parse_args(arguments)
 
     date = datetime.datetime.now()
-    exp_name = "{}-{}-{}-{}-{}".format(args.exp_type, args.noise_type, args.noise_func, date.month, date.day)
+    exp_name = "{}-{}-{}-{}-{}-{}".format(args.exp_type, args.noise_type, args.noise_func, args.alpha,
+                                          date.month, date.day)
     log_file = exp_name + ".log"
 
     if not os.path.exists(exp_name):
