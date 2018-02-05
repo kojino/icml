@@ -11,8 +11,8 @@
 NOISE_TYPE="targeted"
 ALPHA=2.2
 DATA_SET="mnist"
-MWU_ITERS=95
-OPT_ITERS=3000
+MWU_ITERS=2
+OPT_ITERS=10
 LR=.001
 
 CMD="python -m deep_learning_experiments -data_set $DATA_SET -mwu_iters $MWU_ITERS -learning_rate $LR -noise_type $NOISE_TYPE -alpha $ALPHA -opt_iters $OPT_ITERS"
