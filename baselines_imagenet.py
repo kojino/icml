@@ -86,7 +86,7 @@ def main(arguments):
         data_dims = (224, 3, 1000)
         box_vals = (0.0, 255.0)
         X_exp = X_exp[:50]
-        Y_exp = Y_exp[:50]  
+        Y_exp = Y_exp[:50]
         Target_exp = Target_exp[:50]
 
         log.debug("Ensemble Accuracy {}".format(ensemble.evaluate(X_exp, Y_exp)))
