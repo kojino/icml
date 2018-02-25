@@ -86,7 +86,6 @@ def main(arguments):
     np.save(exp_name + "/" + "loss_history.npy", loss_history)
     np.save(exp_name + "/" + "acc_history.npy", acc_history)
     np.save(exp_name + "/" + "action_loss.npy", action_loss)
-
     log.debug("Success")
 
 if __name__ == "__main__":
