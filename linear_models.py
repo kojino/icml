@@ -73,10 +73,10 @@ def trainLBC(X, Y):
 
 class LinearOneVsAllClassifier(object):
     """
-    Class for Lin Binary Classifiers
+    Class for Linear Multiclass Classifiers
 
     weights: np array of shape (num_classes, dim)
-    bias: scalar
+    bias: np array of shape (dim,)
     """
 
     def __init__(self, num_classes, weights, bias):
@@ -95,9 +95,9 @@ class LinearOneVsAllClassifier(object):
 
     def distance(self, X):
         """
-        Computes the signed distance from a point to the decision boundary (hyperplane)
+        Computes the minimum distance from a point to the decision boundary
 
-        returns: a vector of shape (num_points,) with the correspoding distances
+        returns: a vector of shape (num_points,) with the corresponding distances
         """
         n = X.shape[0]
         Y = self.predict(X)
@@ -121,7 +121,7 @@ class LinearOneVsAllClassifier(object):
 
     def gradient(self, X, targets):
         """
-        returns gradient
+        returns gradient of the reverse (targeted) hinge loss
         """
         preds = np.matmul(X, self.weights.T) + self.bias
         n = X.shape[0]
@@ -144,6 +144,9 @@ class LinearOneVsAllClassifier(object):
         return np.array(gradient)
 
     def rhinge_loss(self, X, targets):
+        """
+        returns reverse hinge loss of points in X and their targets
+        """
         preds = np.matmul(X, self.weights.T) + self.bias
         res = []
         for i in xrange(len(X)):
@@ -157,6 +160,9 @@ class LinearOneVsAllClassifier(object):
         return res
 
     def untargeted_loss(self, X, Y):
+        """
+        computes the untargeted hinge loss of (X, Y)
+        """
         preds = np.matmul(X, self.weights.T) + self.bias
         n = len(X)
         loss = []
@@ -176,7 +182,7 @@ class LinearOneVsAllClassifier(object):
 
     def gradient_untargeted(self, X, Y):
         """
-        returns gradient
+        computes gradients the untargeted hinge loss of (X, Y)
         """
         preds = np.matmul(X, self.weights.T) + self.bias
         n = len(X)

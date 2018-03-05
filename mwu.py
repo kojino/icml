@@ -4,6 +4,11 @@ import logging as log
 
 
 def evaluateCosts(models, V, X, Y, targets, dl=False):
+    """
+    Returns the 0-1 loss of the models on input (X + V, Y) if targets is False
+    Else returns the target accuracy of the models on (X + V, Targetes)
+    dl is a bool to indicate whether the models are linear classifiers or deep learning models
+    """
     if targets is not False:
         if dl:
             res = np.array([model.evaluate(X + V, targets)[1] for model in models])
@@ -18,6 +23,10 @@ def evaluateCosts(models, V, X, Y, targets, dl=False):
 
 
 def adversary(distribution, models, X, Y, alpha, noiseFunc, targets):
+    """
+    uses the noise function to compute adversarial perturbations that maximize the loss of the learner under
+    the chosen distribution
+    """
     if targets is not False:
         res = np.array([noiseFunc(distribution, models, x, y, alpha, target=target) for x, y, target
                         in zip(X, Y, targets)])
@@ -28,7 +37,7 @@ def adversary(distribution, models, X, Y, alpha, noiseFunc, targets):
 
 def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=False, dl=False):
     num_models = len(models)
-
+    # compute epsilon as a function of the number of rounds, see MWU proof for more detail
     if epsilon is None:
         delta = np.sqrt(4 * np.log(num_models) / float(T))
         epsilon = delta / 2.0

@@ -58,6 +58,7 @@ def main(arguments):
 
         log.debug("\nbeginning to load models...")
 
+        # setup models
         if args.data_set == "mnist":
             model_dir = "deep_networks"
             models = [conv_net(False, 2, 200, model_dir + "/conv0"), conv_net(True, 2, 200, model_dir + "/conv1"),
@@ -93,6 +94,7 @@ def main(arguments):
         Y_exp = np.load(data_path + "/" + "Y_exp.npy")
         Target_exp = np.load(data_path + "/" + "Target_exp.npy")
 
+        # fit dta parameters
         if args.data_set == "mnist":
             X_exp = X_exp.reshape(-1, 28, 28, 1)
             Y_exp = np.array([(np.arange(10) == l).astype(np.float32) for l in Y_exp])
@@ -109,7 +111,7 @@ def main(arguments):
         log.debug("Num Points {}".format(X_exp.shape[0]))
         target_bool = args.noise_type == "targeted"
 
-        # initialize the attack object_
+        # initialize the attack object
         attack_obj = GradientDescentDL(sess, models, args.alpha, data_dims, box_vals, targeted=target_bool,
                                        batch_size=1, max_iterations=args.opt_iters, learning_rate=args.learning_rate,
                                        confidence=0)

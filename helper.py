@@ -19,6 +19,7 @@ def getMax(lst, target):
 
 
 def findNoiseBoundsBinary(models, X, Y):
+    # find the min max bounds for each point given a list of models
     max_bounds = []
     num_models = len(models)
     for i in xrange(len(X)):
@@ -30,12 +31,8 @@ def findNoiseBoundsBinary(models, X, Y):
     return min_bounds, max_bounds
 
 
-def findNoiseBoundsMulti(models, X, Y):
-    # max_bounds = []
-    # num_models = len(models)
-    # for i in xrange(len(X)):
-    #     max_v = distributionalOracleOneVsAll([1] * num_models, models, X[i], Y[i], sys.maxint)
-    #     max_bounds.append(np.linalg.norm(max_v))
+def findNoiseBoundsMulti(models, X):
+    # find the minimum distance to the class boundary for each point in X
     min_bounds = np.array([model.distance(X) for model in models]).T
     min_bounds = np.mean(min_bounds, axis=1)
     return min_bounds
@@ -50,6 +47,7 @@ def shuffleArraysInUnison(a, b, p=None):
 
 
 def generate_data(num_pts, X, Y, models, target_dict=False):
+    # returns num_pts from (X, Y) that are correctly classified by all models
     num_selected = 0
     num_models = len(models)
     resX = []
@@ -75,13 +73,8 @@ def generate_data(num_pts, X, Y, models, target_dict=False):
 
 
 def subsetData(data, labels, label_dict):
-    """
-    used for binary classification TODO: fill out comments
-    :param data:
-    :param labels:
-    :param label_dict:
-    :return:
-    """
+    # used for binary classification, subsets data to only include labels in label dict
+    # label dict has the form of original label -> new label
     subset = set(label_dict.keys())
     X = []
     Y = []

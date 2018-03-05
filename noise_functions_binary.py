@@ -7,9 +7,9 @@ import numpy as np
 def tryRegionBinary(models, signs, x, delta=1e-10):
     """
     models: list of LinearBinaryClassifiers
-    signs: list of signs of length num_models
-    x: np array of shape dim
-    finds a vector in the region denoted by the signs vector
+    signs: list of signs (+1, -1) of length num_models
+    x: np array of shape dim (a single point)
+    returns: a vector in the region denoted by the signs vector
     """
     dim = x.shape[0]
     P = matrix(np.identity(dim))
@@ -39,6 +39,9 @@ def tryRegionBinary(models, signs, x, delta=1e-10):
 
 
 def distributionalOracle(distribution, models, x, y, alpha):
+    """
+    computes the optimal perturbation for x under alpha and the given distribution
+    """
     num_models = len(models)
     # we should only take into consideration models that we could feasibly trick
     dists = [model.distance(x) for model in models]

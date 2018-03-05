@@ -4,6 +4,7 @@
 ##
 ## This program is licenced under the BSD 2-Clause licence,
 ## contained in the LICENCE file in this directory.
+## Modified by Juan Perdomo 2018
 
 import numpy as np
 import gzip
@@ -11,9 +12,6 @@ import os
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, Dropout
-from keras.optimizers import SGD
-
-# OPTIMIZER = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 
 
 def extract_data(filemodel_dir, num_images):
@@ -55,6 +53,13 @@ def train_network(model, X_train, Y_train, X_val, Y_val, batch_size, epochs, fil
 
 
 def conv_net(extra_conv, num_layers, nodes_per_layer, restore=None):
+    """
+    :param extra_conv: bool to add an extra convolutional layer
+    :param num_layers: int
+    :param nodes_per_layer: int
+    :param restore: file to restore from, None if you want to train a new one
+    :return: keras conv net
+    """
     model = Sequential()
 
     model.add(Conv2D(32, (3, 3), input_shape=(28, 28, 1)))

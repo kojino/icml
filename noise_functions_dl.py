@@ -1,7 +1,4 @@
-## l2_attack.py -- attack a network optimizing for l_2 distance
-##
-## Copyright (C) 2016, Nicholas Carlini <nicholas@carlini.com>.
-##
+## modified from l2_attack.py -- Copyright (C) 2016, Nicholas Carlini <nicholas@carlini.com>.
 ## This program is licenced under the BSD 2-Clause licence,
 ## contained in the LICENCE file in this directory.
 
@@ -25,29 +22,16 @@ class GradientDescentDL:
                  confidence=CONFIDENCE, targeted=TARGETED, learning_rate=LEARNING_RATE,
                  max_iterations=MAX_ITERATIONS):
         """
-        The L_2 optimized attack. 
 
-        This attack is the most efficient and should be used as the primary 
-        attack to evaluate potential defenses.
-
-        Returns adversarial examples for the supplied model.
-
-        confidence: Confidence of adversarial examples: higher produces examples
-          that are farther away, but more strongly classified as adversarial.
-        batch_size: Number of attacks to run simultaneously.
-        targeted: True if we should perform a targetted attack, False otherwise.
-        learning_rate: The learning rate for the attack algorithm. Smaller values
-          produce better results but are slower to converge.
-        binary_search_steps: The number of times we perform binary search to
-          find the optimal tradeoff-constant between distance and confidence. 
-        max_iterations: The maximum number of iterations. Larger values are more
-          accurate; setting too small will require a large learning rate and will
-          produce poor results.
-        initial_const: The initial tradeoff-constant to use to tune the relative
-          importance of distance and confidence. If binary_search_steps is large,
-          the initial constant is not important.
-        boxmin: Minimum pixel value (default -0.5).
-        boxmax: Maximum pixel value (default 0.5).
+        sess: Tensorflow session
+        models: list of keras models
+        alpha:  noise budget
+        dataset_params: tuple of image_size, num_channels, and the number of labels
+        box_vals: (min pixel value, max pixel value)
+        confidence: scalar, increases margin of adversarial example
+        targeted: boolean value
+        learning_rate: learning rate for the Adam optimizer
+        max_iterations: int
         """
         log.debug("Number of models {} ".format(len(models)))
         image_size, num_channels, num_labels = dataset_params  # imagenet parameters 224, 3, 1000 (0, 255)
@@ -77,7 +61,7 @@ class GradientDescentDL:
         self.assign_tlab = tf.placeholder(tf.float32, (batch_size, num_labels))
         self.assign_weights = tf.placeholder(tf.float32, [self.num_models])
 
-        # the resulting image, tanh'd to keep bounded from boxmin to boxmax
+        # the resulting image, clipped to keep bounded from boxmin to boxmax
         self.newimg = tf.clip_by_value(self.modifier + self.timg, self.box_min, self.box_max)
 
         self.outputs = [model(self.newimg) for model in models]
@@ -117,7 +101,6 @@ class GradientDescentDL:
         # Setup the adam optimizer and keep track of variables we're creating
         start_vars = set(x.name for x in tf.global_variables())
         adam = tf.train.AdamOptimizer(self.LEARNING_RATE)
-        # sgd = tf.train.GradientDescentOptimizer(self.LEARNING_RATE)
         optimizer = VariableClippingOptimizer(adam, {self.modifier: [1, 2, 3]}, self.alpha)
         self.train = optimizer.minimize(self.loss, var_list=[self.modifier])
 
@@ -140,9 +123,7 @@ class GradientDescentDL:
         If self.targeted is false, then targets are the original class labels.
         """
         r = []
-        # log.debug('go up to',len(imgs))
         for i in range(0, len(imgs), self.batch_size):
-            # log.debug('tick',i)
             r.extend(self.attack_batch(imgs[i:i+self.batch_size], targets[i:i+self.batch_size], weights))
         return np.array(r)
 
@@ -150,26 +131,6 @@ class GradientDescentDL:
         """
         Run the attack on a batch of images and labels.
         """
-        # def compareLoss(x, y):
-        #     """
-        #     x is an np array of shape num_models x num_classes
-        #     y is the true label or target label of the class
-        #
-        #     returns a number in [0,1] indicating the expected loss of the learner
-        #     """
-        #     if not isinstance(x, (float, int, np.int64)):
-        #         x = np.copy(x)
-        #         for v in x:  # update the target scores for each individual prediction
-        #             if self.TARGETED:
-        #                 v[y] -= self.CONFIDENCE
-        #             else:
-        #                 v[y] += self.CONFIDENCE
-        #         x = np.argmax(x, 1)  # these are the predictions of each hypothesis
-        #
-        #     if self.TARGETED:
-        #         return np.dot(x == y, weights)
-        #     else:
-        #         return np.dot(x != y, weights)
 
         batch_size = self.batch_size
         best_attack = [np.zeros(imgs[0].shape)] * batch_size
@@ -185,7 +146,7 @@ class GradientDescentDL:
         self.sess.run(self.setup, {self.assign_timg: batch,
                                    self.assign_tlab: batchlab,
                                    self.assign_weights: weights})
-
+        # keras dependency
         from keras import backend as K
 
         for iteration in xrange(self.MAX_ITERATIONS):
@@ -206,7 +167,7 @@ class GradientDescentDL:
             scores = np.array(scores).reshape(self.batch_size, self.num_models, self.num_labels)
 
             for e, (sc, ii) in enumerate(zip(scores, nimg)):
-                if loss < best_score[e]:  # we've found a clear improvement for this value of c
+                if loss < best_score[e]:  # we've found a clear improvement for this attack
                     best_score[e] = loss
                     best_attack[e] = ii
 
