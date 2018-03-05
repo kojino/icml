@@ -1,3 +1,6 @@
 *.npy
 *.JPEG
 *.jpeg
+*.png
+*.gif
+*.log
