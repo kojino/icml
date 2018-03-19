@@ -16,6 +16,8 @@ def main(arguments):
                         default="untargeted", type=str)
     parser.add_argument("-exp_type", help="binary or multiclass experiments",
                         choices=["binary", "multiclass"], required=True)
+    parser.add_argument("-sample", help="binary or multiclass experiments",
+                        choices=["none", "once", "iter"], required=True)
     parser.add_argument("-noise_func", help="noise function used for the adversary",
                         choices=["randomAscent", "greedyAscent", "oracle", "gradientDescent", "gradientNonConvex"],
                         required=True)
@@ -26,8 +28,8 @@ def main(arguments):
     args = parser.parse_args(arguments)
 
     date = datetime.datetime.now()
-    exp_name = "{}-{}-{}-{}-{}-{}".format(args.exp_type, args.noise_type, args.noise_func, args.alpha,
-                                          date.month, date.day)
+    exp_name = "{}-{}-{}-{}-{}-{}-{}".format(args.exp_type, args.noise_type, args.noise_func, args.alpha,
+                                          args.sample, date.month, date.day)
     log_file = exp_name + ".log"
 
     if not os.path.exists(exp_name):
@@ -79,7 +81,7 @@ def main(arguments):
         noise_func = FUNCTION_DICT_MULTI[args.noise_func]
 
     weights, noise, loss_history, acc_history, action_loss = runMWU(models, args.iters, X_exp, Y_exp, args.alpha,
-                                                                    noise_func, exp_name, targeted=Target_exp)
+                                                                    noise_func, exp_name, targeted=Target_exp, sample=args.sample)
 
     np.save(exp_name + "/" + "weights.npy", weights)
     np.save(exp_name + "/" + "noise.npy", noise)
