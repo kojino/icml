@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from noise_functions_binary import tryRegionBinary
 from noise_functions_multiclass import distributionalOracleOneVsAll
 import sys
@@ -87,9 +87,9 @@ def subsetData(data, labels, label_dict):
     return np.array(X), np.array(Y)
 
 
-def showImage(img):
-    dim = int(np.sqrt(img.shape[0]))
-    plt.imshow(img.reshape(dim, dim), cmap='gray')
+# def showImage(img):
+#     dim = int(np.sqrt(img.shape[0]))
+#     plt.imshow(img.reshape(dim, dim), cmap='gray')
 
 IMAGENET_LABELS = {
  0: 'tench, Tinca tinca',
