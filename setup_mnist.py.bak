@@ -76,7 +76,7 @@ def conv_net(extra_conv, num_layers, nodes_per_layer, restore=None):
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
     model.add(Flatten())
-    for _ in range(num_layers):
+    for _ in xrange(num_layers):
         model.add(Dense(nodes_per_layer))
         model.add(Activation('relu'))
         model.add(Dense(nodes_per_layer))

@@ -90,7 +90,7 @@ def main(arguments):
         log.debug("Ensemble Accuracy {}".format(ensemble.evaluate(X_exp, Y_exp)))
 
         target_bool = args.noise_type == "targeted"
-        print("TARGET BOOL", target_bool)
+        print "TARGET BOOL", target_bool
         if args.model < 4:
             exp_models = [models[args.model]]
         else:

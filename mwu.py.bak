@@ -57,7 +57,7 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=Fa
 
     w.append(np.ones(num_models) / num_models)
 
-    for t in range(T):
+    for t in xrange(T):
         log.debug("Iteration {}\n".format(t))
 
         if t % (T * .10) == 0 and t > 0:
@@ -85,7 +85,7 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=Fa
             acc_history.append(max_acc)
 
         loss = np.dot(w[t], cost_t)
-        individual = [w[t][j] * cost_t[j] for j in range(num_models)]
+        individual = [w[t][j] * cost_t[j] for j in xrange(num_models)]
 
         log.debug("Weights {} Sum of Weights {}".format(w[t], sum(w[t])))
 
@@ -112,12 +112,12 @@ def runMWU(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targeted=Fa
         new_w = np.copy(w[t])
 
         # penalize experts
-        for i in range(num_models):
+        for i in xrange(num_models):
             new_w[i] *= (1.0 - epsilon) ** cost_t[i]
 
         # renormalize weights
         w_sum = new_w.sum()
-        for i in range(num_models - 1):
+        for i in xrange(num_models - 1):
             new_w[i] = new_w[i] / w_sum
         new_w[-1] = 1.0 - new_w[:-1].sum()
 
@@ -151,7 +151,7 @@ def runMWUSample(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targe
 
     w.append(np.ones(num_models) / num_models)
 
-    for t in range(T):
+    for t in xrange(T):
         log.debug("Iteration {}\n".format(t))
 
         # TODO: samples num_sample models from `models`
@@ -182,7 +182,7 @@ def runMWUSample(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targe
             acc_history.append(max_acc)
 
         loss = np.dot(w[t], cost_t)
-        individual = [w[t][j] * cost_t[j] for j in range(num_models)]
+        individual = [w[t][j] * cost_t[j] for j in xrange(num_models)]
 
         log.debug("Weights {} Sum of Weights {}".format(w[t], sum(w[t])))
 
@@ -210,12 +210,12 @@ def runMWUSample(models, T, X, Y, alpha, noiseFunc, exp_dir, epsilon=None, targe
 
         # penalize experts
         # TODO: penalize according to the sampled models
-        for i in range(num_models):
+        for i in xrange(num_models):
             new_w[i] *= (1.0 - epsilon) ** cost_t[i]
 
         # renormalize weights
         w_sum = new_w.sum()
-        for i in range(num_models - 1):
+        for i in xrange(num_models - 1):
             new_w[i] = new_w[i] / w_sum
         new_w[-1] = 1.0 - new_w[:-1].sum()
 

@@ -13,8 +13,8 @@ def tryRegionOneVsAll(models, labels, x, delta=1e-10):
     h = []
     G = []
     num_models = len(models)
-    for i in range(num_models):
-        others = list(range(10))
+    for i in xrange(num_models):
+        others = range(10)
         target = labels[i]
         del others[target]
         target_w, target_b = models[i].weights[target], models[i].bias[target]
@@ -30,7 +30,7 @@ def tryRegionOneVsAll(models, labels, x, delta=1e-10):
     if sol['status'] == 'optimal':
         v = np.array(sol['x']).reshape(-1,)
         perturbed_x = np.array(x + v).reshape(1, -1)
-        is_desired_label = [models[i].predict(perturbed_x)[0] == labels[i] for i in range(num_models)]
+        is_desired_label = [models[i].predict(perturbed_x)[0] == labels[i] for i in xrange(num_models)]
         if sum(is_desired_label) == num_models:
             return v
         else:
@@ -43,7 +43,7 @@ def distributionalOracleOneVsAll(distribution, models, x, y, alpha, target=False
     num_models = len(models)
 
     labels_values = []
-    for labels in product(list(range(10)), repeat=num_models):  # iterate over all possible regions
+    for labels in product(range(10), repeat=num_models):  # iterate over all possible regions
         if target:
             is_misclassified = (np.array(labels) == target).astype(np.float32)
         else:
@@ -76,8 +76,8 @@ def coordinateAscentMulti(distribution, models, x, y, alpha, target=False, greed
 
     labels = [y] * num_models  # initialize to the original point, of length feasible_models
 
-    model_options = dict(list(zip(list(range(num_models)), distribution)))
-    for i in range(num_models):
+    model_options = dict(zip(range(num_models), distribution))
+    for i in xrange(num_models):
         if greedy:  # select model with the highest probability weight
             coord = max(model_options, key=model_options.get)
             if target:
@@ -85,11 +85,11 @@ def coordinateAscentMulti(distribution, models, x, y, alpha, target=False, greed
             else:
                 labels[coord] = greedy[y]
         else:  # random: select a random model
-            coord = np.random.choice(list(model_options.keys()))
+            coord = np.random.choice(model_options.keys())
             if target:
                 labels[coord] = target
             else:
-                label_options = list(range(10))
+                label_options = range(10)
                 del label_options[y]
                 labels[coord] = np.random.choice(label_options)
 
@@ -109,9 +109,9 @@ def coordinateAscentMulti(distribution, models, x, y, alpha, target=False, greed
 
 def gradientDescentTargeted(distribution, models, x, target, alpha, learning_rate=.001, T=3000, early_stop=5):
     v = np.zeros(len(x))
-    best_sol = (sys.maxsize, v)
+    best_sol = (sys.maxint, v)
     loss_queue = []
-    for i in range(T):
+    for i in xrange(T):
         gradient = sum([-1 * p * model.gradient(np.array([x + v]), [target]) for p, model in zip(distribution, models)])[0]
 
         v += learning_rate * gradient
@@ -141,7 +141,7 @@ def gradientDescentMulti(distribution, models, x, y, alpha, target=False):
     if target:
         return gradientDescentTargeted(distribution, models, x, target, alpha)[1]
     else:
-        targets = list(range(10))
+        targets = range(10)
         del targets[y]
         noise_options = []
         for target in targets:
@@ -154,9 +154,9 @@ def gradientDescentMulti(distribution, models, x, y, alpha, target=False):
 
 def gradientDescentNonConvex(distribution, models, x, y, alpha, learning_rate=.001, T=3000, early_stop=5):
     v = np.zeros(len(x))
-    best_sol = (sys.maxsize, v)
+    best_sol = (sys.maxint, v)
     loss_queue = []
-    for i in range(T):
+    for i in xrange(T):
         gradient = sum([-1 * p * model.gradient_untargeted(np.array([x + v]), [y])
                         for p, model in zip(distribution, models)])[0]
         v += learning_rate * gradient

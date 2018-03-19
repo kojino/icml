@@ -72,7 +72,7 @@ class GradientDescentDL:
         # compute the probability of the label class versus the maximum other
         reals = []
         others = []
-        for i in range(self.num_models):
+        for i in xrange(self.num_models):
             real = tf.reduce_sum(self.tlab * self.outputs[i], 1)
             other = tf.reduce_max((1 - self.tlab) * self.outputs[i], 1)
             reals.append(real)
@@ -83,11 +83,11 @@ class GradientDescentDL:
 
         if self.TARGETED:
             # if targeted, optimize for making the other class most likely
-            for i in range(self.num_models):
+            for i in xrange(self.num_models):
                 loss1list.append(tf.maximum(0.0, self.weights[i] * (others[i] - reals[i] + self.CONFIDENCE)))
         else:
             # if untargeted, optimize for making this class least likely.
-            for i in range(self.num_models):
+            for i in xrange(self.num_models):
                 loss1list.append(tf.maximum(0.0, self.weights[i] * (reals[i] - others[i] + self.CONFIDENCE)))
 
         self.loss1list = loss1list
@@ -140,7 +140,7 @@ class GradientDescentDL:
         batch = imgs[:batch_size]
         batchlab = labs[:batch_size]
 
-        best_score = [sys.maxsize] * batch_size
+        best_score = [sys.maxint] * batch_size
 
         # set the variables so that we don't have to send them over again
         self.sess.run(self.setup, {self.assign_timg: batch,
@@ -149,7 +149,7 @@ class GradientDescentDL:
         # keras dependency
         from keras import backend as K
 
-        for iteration in range(self.MAX_ITERATIONS):
+        for iteration in xrange(self.MAX_ITERATIONS):
             start_time = time.time()
             # perform the attack
             self.sess.run([self.train], feed_dict={K.learning_phase(): 0})

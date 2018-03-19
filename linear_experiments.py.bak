@@ -53,7 +53,7 @@ def main(arguments):
 
     models = []
 
-    for i in range(args.num_classifiers):
+    for i in xrange(args.num_classifiers):
         weights = np.load(args.data_path + "/" + "weights_{}.npy".format(i))
         bias = np.load(args.data_path + "/" + "bias_{}.npy".format(i))
         if args.exp_type == "binary":
