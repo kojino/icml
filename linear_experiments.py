@@ -16,8 +16,10 @@ def main(arguments):
                         default="untargeted", type=str)
     parser.add_argument("-exp_type", help="binary or multiclass experiments",
                         choices=["binary", "multiclass"], required=True)
-    parser.add_argument("-sample", help="binary or multiclass experiments",
+    parser.add_argument("-sample", help="sampling method of the classifiers",
                         choices=["none", "once", "iter"], required=True)
+    parser.add_argument("-num_samples", help="number of classifiers to sample",
+                        type=int, default=5)
     parser.add_argument("-noise_func", help="noise function used for the adversary",
                         choices=["randomAscent", "greedyAscent", "oracle", "gradientDescent", "gradientNonConvex"],
                         required=True)
@@ -28,8 +30,8 @@ def main(arguments):
     args = parser.parse_args(arguments)
 
     date = datetime.datetime.now()
-    exp_name = "{}-{}-{}-{}-{}-{}-{}".format(args.exp_type, args.noise_type, args.noise_func, args.alpha,
-                                          args.sample, date.month, date.day)
+    exp_name = "{}-{}-{}-{}-{}-{}-{}-{}".format(args.exp_type, args.noise_type, args.noise_func, args.alpha,
+                                          args.sample, args.num_samples, date.month, date.day)
     log_file = exp_name + ".log"
 
     if not os.path.exists(exp_name):
@@ -49,6 +51,10 @@ def main(arguments):
     log.debug("Alpha {}".format(args.alpha))
     log.debug("Data path : {}".format(args.data_path))
     log.debug("Num Classifiers : {}".format(args.num_classifiers))
+    log.debug("Sample : {}".format(args.sample))
+    log.debug("Num Samples : {}".format(args.num_samples))
+
+
 
     X_test = np.load(args.data_path + "/" + "X_test.npy")
     Y_test = np.load(args.data_path + "/" + "Y_test.npy")
